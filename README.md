@@ -2,6 +2,6 @@
 You can install `FNN` from GitHub with the following command:
 
 ``` r
-# install.packages("devtools")
-devtools::install_github("meysubb/cfbscrapR")
+install.packages("devtools")
+install_github("meysubb/cfbscrapR")
 ```
