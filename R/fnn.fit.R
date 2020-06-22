@@ -109,7 +109,7 @@
 #' Classification Example with raw_data = T
 #'
 #' # Loading data
-#' data("tecator")
+#' tecator = FNN::tecator
 #'
 #' # Making classification bins
 #' tecator_resp = as.factor(ifelse(tecator$y$Fat > 25, 1, 0))
@@ -153,7 +153,7 @@
 #' Example with Pre-Processing (raw_data = F)
 #'
 #' # loading data
-#' data("tecator")
+#' tecator = FNN::tecator
 #'
 #' # libraries
 #' library(fda)

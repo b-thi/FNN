@@ -110,15 +110,10 @@
 #' total_prec = apply(daily$precav, 2, mean)
 #'
 #' # cross-validating
-#' cv_example <- fnn.cv(nfolds = 2,
+#' cv_example <- fnn.cv(nfolds = 5,
 #'                      resp = total_prec,
 #'                      func_cov = weather_data_full,
 #'                      scalar_cov = scalar_full,
-#'                      basis_choice = c("fourier"),
-#'                      num_basis = c(7),
-#'                      hidden_layers = 2,
-#'                      neurons_per_layer = c(1024, 1024),
-#'                      activations_in_layers = c("sigmoid", "linear"),
 #'                      domain_range = list(c(1, 365)),
 #'                      learn_rate = 0.001)
 #'

@@ -23,7 +23,7 @@
 #' library(fda)
 #'
 #' # loading data
-#' data("tecator")
+#' tecator = FNN::tecator
 #'
 #' # define the time points on which the functional predictor is observed.
 #' timepts = tecator$absorp.fdata$argvals

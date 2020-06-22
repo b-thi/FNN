@@ -90,8 +90,7 @@
 #'                          temp_data,
 #'                          basis_choice = c("fourier"),
 #'                          domain_range = list(c(1, 24)),
-#'                          nfolds = 2,
-#'                          cores = 4)
+#'                          nfolds = 2)
 #'
 #' # Looking at results
 #' weather_tuned

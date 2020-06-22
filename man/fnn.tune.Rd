@@ -111,8 +111,7 @@ weather_tuned = fnn.tune(tune_list_weather,
                          temp_data,
                          basis_choice = c("fourier"),
                          domain_range = list(c(1, 24)),
-                         nfolds = 2,
-                         cores = 4)
+                         nfolds = 2)
 
 # Looking at results
 weather_tuned
