@@ -1,0 +1,32 @@
+Package: FNN
+Title: Functional Neural Networks
+Version: 0.8
+Authors@R: c(
+    person("Richard", "Groenewald", role = "ctb"),
+    person("Barinder", "Thind", , "barinder.thi@gmail.com", role = c("aut", "cre", "cph")),
+    person("Jiguo Cao - aut", "Last", role = "aut"),
+    person("Sidi Wu - ctb", role = "ctb")
+    )
+Description: This package fits models of the form y(z, f(x) | theta) = z + f(x) + epsilon. In other words, this package will allow users to build
+             models that have either functional or scalar responses paired with functional and scalar covariates. The main backbone of these models is
+             neural networks. There are also a number of helper functions that make workflow easier for the user. 
+Details: To be updated.
+Imports: keras,
+         tensorflow,
+         fda.usc,
+         fda,
+         ggplot2,
+         ggpubr,
+         caret,
+         pbapply,
+         reshape2,
+         flux,
+         doParallel,
+         foreach,
+         Matrix
+URL: https://arxiv.org/abs/2006.09590
+License: `use_mit_license()`
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.0
