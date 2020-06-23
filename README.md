@@ -29,7 +29,7 @@ We'll do a classification example using meat samples with fat contents > 25 as "
 # Making classification bins
 tecator_resp = as.factor(ifelse(tecator$y$Fat > 25, 1, 0))
 ```
-We have our response, what about our predictors? Well, to keep it simple, let's first consider our scalar responses; we'll use the water contents of the meat samples as a scalar covariate
+We have our response, what about our predictors? Well, to keep it simple, let's first consider our scalar covariates; we'll use the water contents of the meat samples as a scalar covariate
 ``` r
 # Non functional covariate
 tecator_scalar = data.frame(water = tecator$y$Water)
@@ -47,7 +47,7 @@ test_y = tecator_resp[-ind]
 ```
 In the chunk of code above, I split the absorbance curves into a test and train set with a 25/75 split. Since we are doing this the "easy" way, we won't need to do any pre-processing on the raw absorbance points (of each meat sample). I also split the previously defined scalar covariates and response in the same way.
 
-Before fitting the model, we need to get the functional covariates in the proper format (okay, so there is a little bit of processing). In the case where we are passing in the raw curve points, we need to pass them in as a list of K dimensions where K is the number of functional covariates. This is done as follows:
+Before fitting the model, we need to get the functional covariates in the proper format (okay, so there is a little bit of processing). In the case where we are passing in the raw curve points, we need to pass them in as a list of K dimensions where K is the number of functional covariates. In the situation at hand, we only have one functional covariate so our list will have one element:
 ``` r
 # Making list element to pass in
 func_covs_train = list(train_x)
