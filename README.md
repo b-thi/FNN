@@ -24,4 +24,67 @@ library(FNN)
 # Loading data
 tecator = FNN::tecator
 ```
+We'll do a classification example using meat samples with fat contents > 25 as "high fat" and < 25 as "low fat" as the dependent variable.
+``` r
+# Making classification bins
+tecator_resp = as.factor(ifelse(tecator$y$Fat > 25, 1, 0))
+```
+We have our response, what about our predictors? Well, to keep it simple, let's first consider our scalar responses; we'll use the water contents of the meat samples as a scalar covariate
+``` r
+# Non functional covariate
+tecator_scalar = data.frame(water = tecator$y$Water)
+```
+Let's not add some functional covariates:
+``` r
+# Splitting data
+ind = sample(1:length(tecator_resp), round(0.75*length(tecator_resp)))
+train_x = tecator$absorp.fdata$data[ind,]
+test_x = tecator$absorp.fdata$data[-ind,]
+scalar_train = data.frame(tecator_scalar[ind,1])
+scalar_test = data.frame(tecator_scalar[-ind,1])
+train_y = tecator_resp[ind]
+test_y = tecator_resp[-ind]
+```
+In the chunk of code above, I split the absorbance curves into a test and train set with a 25/75 split. Since we are doing this the "easy" way, we won't need to do any pre-processing on the raw absorbance points (of each meat sample). I also split the previously defined scalar covariates and response in the same way.
 
+Before fitting the model, we need to get the functional covariates in the proper format (okay, so there is a little bit of processing). In the case where we are passing in the raw curve points, we need to pass them in as a list of K dimensions where K is the number of functional covariates. This is done as follows:
+``` r
+# Making list element to pass in
+func_covs_train = list(train_x)
+func_covs_test = list(test_x)
+```
+Now we can fit the model!
+``` r
+# Now running model
+fit_class = fnn.fit(resp = train_y,
+                    func_cov = func_covs_train,
+                    scalar_cov = scalar_train,
+                    hidden_layers = 6,
+                    neurons_per_layer = c(24, 24, 24, 24, 24, 58),
+                    activations_in_layers = c("relu", "relu", "relu", "relu", "relu", "linear"),
+                    domain_range = list(c(850, 1050)),
+                    learn_rate = 0.001,
+                    epochs = 100,
+                    raw_data = T,
+                    early_stopping = T)
+```
+Here, we fit a 6 layer model. There are a number of warnings and error checks in place to make sure that all the dimensionality is consistent. The first three inputs are all objects we defined above! Also, observe that raw_data is true here; this is important to indicate as it tells the model function to do the pre-processing. 
+
+Now that we have our model, we can make some predictions:
+``` r
+# Running prediction
+predict_class = fnn.predict(fit_class,
+                            func_cov = func_covs_test,
+                            scalar_cov = scalar_test,
+                            domain_range = list(c(850, 1050)),
+                            raw_data = T)
+
+# Rounding predictions (they are probabilities)
+rounded_preds = ifelse(round(predict_class)[,2] == 1, 1, 0)
+
+# Confusion matrix
+caret::confusionMatrix(as.factor(rounded_preds), as.factor(test_y))
+```
+Not bad!
+
+Okay that's all I have for now
