@@ -87,4 +87,4 @@ caret::confusionMatrix(as.factor(rounded_preds), as.factor(test_y))
 ```
 Not bad!
 
-Okay that's all I have for now
+Okay that's all I have for now, have fun!
