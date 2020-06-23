@@ -95,7 +95,7 @@ approach.}
 internally take care of that pre-processing.}
 }
 \value{
-The following is returned.
+The following are returned.
 
 \code{predicted_folds} -- The predicted scalar values in each fold.
 
@@ -106,7 +106,7 @@ The following is returned.
 \code{fold_indices} -- The generated indices for each fold; for replication purposes.
 }
 \description{
-This is a convenience function for the user. The inputs are largely the same as the \code{fnn.fit()} function with the
+This is a convenience function for the user. The inputs are largely the same as the \code{\link[=fnn.fit]{fnn.fit()}} function with the
 additional parameter of fold choice. This function only works for scalar responses.
 }
 \details{

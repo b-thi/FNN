@@ -1,10 +1,10 @@
 #' @title Functional Neural Networks with Cross-validation
 #'
 #' @description
-#' This is a convenience function for the user. The inputs are largely the same as the `fnn.fit()` function with the
+#' This is a convenience function for the user. The inputs are largely the same as the [fnn.fit()] function with the
 #' additional parameter of fold choice. This function only works for scalar responses.
 #'
-#' @return The following is returned.
+#' @return The following are returned.
 #'
 #' `predicted_folds` -- The predicted scalar values in each fold.
 #'

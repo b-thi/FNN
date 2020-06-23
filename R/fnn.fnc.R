@@ -3,7 +3,7 @@
 #' @description
 #' This function outputs plots and `ggplot()` objects of the functional weights found by the `fnn.fit()` model.
 #'
-#' @return The following is returned:
+#' @return The following are returned:
 #'
 #' `FNC_Coefficients` -- The estimated coefficients defining the basis expansion for each of the k functional weights.
 #'

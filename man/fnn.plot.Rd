@@ -22,7 +22,7 @@ a functional response.}
 \item{step_size}{The size of the movement from the lower bound of the \code{domanin_range} to the upper bound.}
 }
 \value{
-The following is returned:
+The following are returned:
 
 \code{plot} -- A \code{ggplot()} object of the predicted functional responses.
 

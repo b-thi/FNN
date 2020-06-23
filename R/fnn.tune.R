@@ -5,7 +5,7 @@
 #' in the grid, a cross-validated error is calculated. The best combination is returned along with additional information.
 #' This function only works for scalar responses.
 #'
-#' @return The following is returned:
+#' @return The following are returned:
 #'
 #' `Parameters` -- The final list of hyperparameter chosen by the tuning process.
 #'

@@ -11,8 +11,7 @@ This package fits models of the form y(z, f(x) | theta) = z + f(x) + epsilon. In
              neural networks. There are also a number of helper functions that make workflow easier for the user.
 }
 \details{
-You can list off functions you wish to link to (maybe all of the functions in your package)
-using the bracket syntax: \code{\link[=colSums]{colSums()}} for example.  \verb{Type like this} to get console font.
+To be updated.
 }
 \seealso{
 Useful links:
@@ -26,13 +25,13 @@ Useful links:
 
 Authors:
 \itemize{
-  \item Jiguo Cao - aut Last
+  \item Jiguo Cao
 }
 
 Other contributors:
 \itemize{
   \item Richard Groenewald [contributor]
-  \item Sidi Wu - ctb [contributor]
+  \item Sidi Wu [contributor]
 }
 
 }

@@ -15,7 +15,7 @@ bounds of the k-th functional weight. Must be the same covariates as input into 
 \item{covariate_scaling}{If True, then data will be internally scaled before model development.}
 }
 \value{
-The following is returned:
+The following are returned:
 
 \code{FNC_Coefficients} -- The estimated coefficients defining the basis expansion for each of the k functional weights.
 

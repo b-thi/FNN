@@ -92,7 +92,7 @@ approach.}
 internally take care of that pre-processing.}
 }
 \value{
-The following is returned:
+The following are returned:
 
 \code{model} -- Full keras model that can be used with any functions that act on keras models.
 

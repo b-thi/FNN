@@ -3,7 +3,7 @@
 #' @description
 #' This function is to be used for functional responses. It outputs a `ggplot()` object of the predicted functional responses.
 #'
-#' @return The following is returned:
+#' @return The following are returned:
 #'
 #' `plot` -- A `ggplot()` object of the predicted functional responses.
 #'

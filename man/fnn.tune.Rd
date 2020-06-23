@@ -57,7 +57,7 @@ iterations are completed.}
 internally take care of that pre-processing.}
 }
 \value{
-The following is returned:
+The following are returned:
 
 \code{Parameters} -- The final list of hyperparameter chosen by the tuning process.
 

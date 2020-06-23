@@ -5,7 +5,7 @@
 #' z are the scalar covariates and b(x) are the functional covariates. The form of f() is that of a neural network
 #' with a generalized input space.
 #'
-#' @return The following is returned:
+#' @return The following are returned:
 #'
 #' `model` -- Full keras model that can be used with any functions that act on keras models.
 #'
