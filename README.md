@@ -16,7 +16,7 @@ install_github("b-thi/FNN")
 
 The package functions can be as simple (or complicated) as you want them to be! To illustrate, let's consider the following example:
 
-First, we'll read in the data and load some libraries
+First, we'll read in the data and load some libraries. We'll use the classic Tecator meat sample dataset in this dummy example.
 ``` r
 # Library
 library(FNN)
