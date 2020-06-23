@@ -8,6 +8,20 @@ For more information on the methodology: https://arxiv.org/abs/2006.09590
 You can install `FNN` from GitHub with the following commands:
 
 ``` r
-install.packages("devtools")
+library(devtools)
 install_github("b-thi/FNN")
 ```
+
+## Example Run
+
+The package functions can be as simple (or complicated) as you want them to be! To illustrate, let's consider the following example:
+
+First, we'll read in the data and load some libraries
+``` r
+# Library
+library(FNN)
+
+# Loading data
+tecator = FNN::tecator
+```
+
