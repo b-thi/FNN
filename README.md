@@ -34,7 +34,7 @@ We have our response, what about our predictors? Well, to keep it simple, let's 
 # Non functional covariate
 tecator_scalar = data.frame(water = tecator$y$Water)
 ```
-Let's not add some functional covariates:
+Let's now add some functional covariates:
 ``` r
 # Splitting data
 ind = sample(1:length(tecator_resp), round(0.75*length(tecator_resp)))
