@@ -1,6 +1,6 @@
 # FNN
 
-This package allows the user to build models of the form: f(z, g(x) | θ) where f() is a neural network, z is a vector of scalar covariates, and g(x) is one of a set of functional covariates. The package is built on top of the Keras/Tensorflow architecture.
+This package allows the user to build models of the form: f(z, g(x) | θ) where f() is a neural network, z is a vector of scalar covariates, and g(x) is a vector of functional covariates. The package is built on top of the Keras/Tensorflow architecture.
 
 For more information on the methodology: https://arxiv.org/abs/2006.09590
 
