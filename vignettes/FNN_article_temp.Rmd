@@ -1,0 +1,12 @@
+---
+title: "Article #1"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This is a short article.

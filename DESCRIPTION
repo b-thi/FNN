@@ -23,7 +23,7 @@ Imports: keras,
          doParallel,
          foreach,
          Matrix
-URL: https://arxiv.org/abs/2006.09590
+URL: https://arxiv.org/abs/2006.09590, https://github.com/b-thi/FNN 
 License: `use_mit_license()`
 Encoding: UTF-8
 LazyData: true

@@ -1,0 +1,21 @@
+---
+title: "Vignette #1"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{FNN Vignette 1}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, include=FALSE}
+library(FNN)
+```
+
+This is not a real vignette.

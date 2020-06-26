@@ -1,0 +1,36 @@
+template:
+  params:
+   bootswatch: flatly
+
+navbar:
+  structure:
+    left:  [home, intro, reference, articles, news]
+    right: [github]
+
+authors:
+  Jiguo Cao:
+    href: http://people.stat.sfu.ca/~cao/
+
+# YAML Config for Reference Page
+reference:
+- title: FNN Functions
+  desc:  Available functions for Functional Neural Network
+- contents:
+  - starts_with("fnn.")
+- title: Data Sets
+- contents:
+  - daily
+  - tecator
+
+# YAML Config for Articles Page/Index
+articles:
+- title: Main
+  navbar: Main
+  contents:
+  - FNN
+  - FNN_vignette_temp
+- title: Supplementary
+  desc: Vignettes aimed at package developers
+  contents:
+  - FNN_article_temp
+
