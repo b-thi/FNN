@@ -1,5 +1,5 @@
 ---
-title: "Article #1"
+title: "Demo #1"
 ---
 
 ```{r, include = FALSE}
@@ -9,4 +9,4 @@ knitr::opts_chunk$set(
 )
 ```
 
-This is a short article.
+This is a not a real demo.

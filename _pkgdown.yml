@@ -24,12 +24,12 @@ reference:
 
 # YAML Config for Articles Page/Index
 articles:
-- title: Main
-  navbar: Main
+- title: Vignettes
+  navbar: Vignettes
   contents:
   - FNN
   - FNN_vignette_temp
-- title: Supplementary
-  desc: Vignettes aimed at package developers
+- title: Demos
+  desc: Demos aims to help you better apply this package.
   contents:
   - FNN_article_temp
