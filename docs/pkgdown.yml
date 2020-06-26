@@ -1,0 +1,9 @@
+pandoc: 1.19.2.1
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  FNN: FNN.html
+  FNN_article_temp: FNN_article_temp.html
+  FNN_vignette_temp: FNN_vignette_temp.html
+last_built: 2020-06-26T09:09Z
+
