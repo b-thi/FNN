@@ -32,8 +32,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">FNN</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8</span>
+        <a class="navbar-link" href="index.html">FNN </a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version"> 1.0 </span>
       </span>
     </div>
 
@@ -46,26 +46,35 @@
   </a>
 </li>
 <li>
-  <a href="articles/FNN.html">Get started</a>
+  <a href="articles/FNN.html">Main</a>
 </li>
 <li>
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Demos
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">Main</li>
+    <li class="dropdown-header">Examples</li>
     <li>
-      <a href="articles/FNN_vignette_temp.html">Vignette #1</a>
+      <a href="articles/reg_demo.html">Regression Demo</a>
+    </li>
+        <li>
+      <a href="articles/class_demo.html">Classification Demo</a>
+    </li>
+        <li>
+      <a href="articles/cv_demo.html">Cross-validation Demo</a>
+    </li>
+        <li>
+      <a href="articles/tune_demo.html">Tuning Demo</a>
     </li>
     <li class="divider">
     <li>
-      <a href="articles/index.html">More...</a>
+      <a href="articles/index.html">Upcoming</a>
     </li>
   </ul>
 </li>
@@ -95,7 +104,7 @@
 <div id="fnn" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#fnn" class="anchor"></a>FNN</h1></div>
-<p>This package allows the user to build models of the form: f(z, g(x) | θ) where f() is a neural network, z is a vector of scalar covariates, and g(x) is a vector of functional covariates. The package is built on top of the Keras/Tensorflow architecture.</p>
+<p>This package allows the user to build models of the form: $$f(z, g(x) | θ)$$ where f() is a neural network, z is a vector of scalar covariates, and g(x) is a vector of functional covariates. The package is built on top of the Keras/Tensorflow architecture.</p>
 <p>For more information on the methodology: <a href="https://arxiv.org/abs/2006.09590" class="uri">https://arxiv.org/abs/2006.09590</a></p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
