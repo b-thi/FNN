@@ -97,7 +97,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li class="divider"></li>
-    <li class="dropdown-header">Main</li>
+    <li class="dropdown-header">Vignettes</li>
     <li>
       <a href="../articles/FNN_vignette_temp.html">Vignette #1</a>
     </li>
@@ -175,7 +175,7 @@ bounds of the k-th functional weight. Must be the same covariates as input into 
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># libraries</span>
+    <pre class="examples"><span class='co'># libraries</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>fda</span>)
 
 <span class='co'># loading data</span>
@@ -223,27 +223,10 @@ bounds of the k-th functional weight. Must be the same covariates as input into 
                       <span class='kw'>activations_in_layers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"relu"</span>, <span class='st'>"relu"</span>, <span class='st'>"relu"</span>, <span class='st'>"linear"</span>),
                       <span class='kw'>domain_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>)),
                       <span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>300</span>,
-                      <span class='kw'>learn_rate</span> <span class='kw'>=</span> <span class='fl'>0.002</span>)</div><div class='output co'>#&gt; <span class='error'>Error: Python module tensorflow.keras was not found.</span>
-#&gt; <span class='error'></span>
-#&gt; <span class='error'>Detected Python configuration:</span>
-#&gt; <span class='error'></span>
-#&gt; <span class='error'>python:         C:\Users\Sidi\ANACON~1\python.exe</span>
-#&gt; <span class='error'>libpython:      C:/Users/Sidi/ANACON~1/python27.dll</span>
-#&gt; <span class='error'>pythonhome:     C:\Users\Sidi\ANACON~1</span>
-#&gt; <span class='error'>version:        2.7.16 |Anaconda, Inc.| (default, Mar 14 2019, 15:42:17) [MSC v.1500 64 bit (AMD64)]</span>
-#&gt; <span class='error'>Architecture:   64bit</span>
-#&gt; <span class='error'>numpy:          C:\Users\Sidi\ANACON~1\lib\site-packages\numpy</span>
-#&gt; <span class='error'>numpy_version:  1.16.3</span>
-#&gt; <span class='error'>tensorflow:     [NOT FOUND]</span>
-#&gt; <span class='error'></span>
-#&gt; <span class='error'>python versions found: </span>
-#&gt; <span class='error'> C:\PROGRA~2\Python27\python.exe</span>
-#&gt; <span class='error'> C:\Users\Sidi\ANACON~1\python.exe</span>
-#&gt; <span class='error'> C:\Users\Sidi\AppData\Local\Programs\Python\Python38\\python.exe</span>
-#&gt; <span class='error'></span></div><div class='input'>
+                      <span class='kw'>learn_rate</span> <span class='kw'>=</span> <span class='fl'>0.002</span>)
+
 <span class='co'># Functional weights for this model</span>
-<span class='no'>est_func_weights</span> <span class='kw'>=</span> <span class='fu'>fnn.fnc</span>(<span class='no'>tecator_fnn</span>, <span class='kw'>domain_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>)))</div><div class='output co'>#&gt; <span class='error'>Error in get_weights(model$model): object 'tecator_fnn' not found</span></div><div class='input'>
-</div></pre>
+<span class='no'>est_func_weights</span> <span class='kw'>=</span> <span class='fu'>fnn.fnc</span>(<span class='no'>tecator_fnn</span>, <span class='kw'>domain_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>)))</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
