@@ -1,1 +1,66 @@
+# Tuning Demo
 
+This package offers a simple grid search tuning approach to allow users to improve their models. An example is provided below:
+
+First, we'll read in the data and load some libraries.
+``` r
+# libraries
+library(fda)
+
+# Loading data
+data("daily")
+```
+We'll be working with Weather data set. Let's first get our (scalar) response, which is the average temperature in 35 Canadian cities:
+``` r
+# Creating functional data
+nbasis = 65
+tempbasis65  = create.fourier.basis(c(0,365), nbasis)
+timepts = seq(1, 365, 1)
+temp_fd = Data2fd(timepts, daily$tempav, tempbasis65)
+```
+In the chunk of code above, we are creating functional observations using a 65 term Fourier basis expansion. The Data2fd() function converts the raw data into the functional data objects that we need. In particular, we are concerned with the coefficients defining each of the 35 functional observations here (one set for each of the 35 cities). Let's not extract out those functional observations and get them into the format required for the fnn.fit() function:
+``` r
+# Obtaining response
+total_prec = apply(daily$precav, 2, mean)
+```
+Let's now build our functional data:
+``` r
+# Creating functional data
+temp_data = array(dim = c(65, 35, 1))
+tempbasis65  = create.fourier.basis(c(0,365), 65)
+timepts = seq(1, 365, 1)
+temp_fd = Data2fd(timepts, daily$tempav, tempbasis65)
+
+# Data set up
+temp_data[,,1] = temp_fd$coefs
+```
+In this chunk of code above, we create the functional data use a 65 term Fourier basis expansion. We then store the cofficients defining the temperature curves for each city into a tensor which is the appropriate format to be passed into the tuning function (although, you may also pass in raw data if you don't want to do the pre-processing).
+
+Now, let's create a list of the hyperparamters we want to tune for:
+``` r
+# Creating grid
+tune_list_weather = list(num_hidden_layers = c(2),
+                         neurons = c(8, 16),
+                         epochs = c(250),
+                         val_split = c(0.2),
+                         patience = c(15),
+                         learn_rate = c(0.01, 0.1),
+                         num_basis = c(7),
+                         activation_choice = c("relu", "sigmoid"))
+```
+The tuning function will take all combinations for each number of layers of these choices. For example, if we pick the number of hidden layers to be 3 and our neurons choices to be 8, 16, and 32, then the grid will form so that the first model tested has 8, 8, 8 neurons across its 3 layers and the final model has 32, 32, 32. In other words, you can specify any number of layers and any number of neurons (and activation functions) and the tuning function will find all combinations of each across all number of hidden layers passed in. 
+
+Finally, we can run the tuning function:
+``` r
+# Running Tuning
+weather_tuned = fnn.tune(tune_list_weather,
+                         total_prec,
+                         temp_data,
+                         basis_choice = c("fourier"),
+                         domain_range = list(c(1, 24)),
+                         nfolds = 2)
+
+# Looking at results
+weather_tuned
+```
+The final output will be the model parameters that had the lowest crossvalidated error. For more details on the output, check out the reference.
