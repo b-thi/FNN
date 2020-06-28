@@ -1,6 +1,6 @@
 Package: FNN
 Title: Functional Neural Networks
-Version: 0.8
+Version: 1.0
 Authors@R: c(
     person("Richard", "Groenewald", role = "ctb"),
     person("Barinder", "Thind", , "barinder.thi@gmail.com", role = c("aut", "cre", "cph")),
