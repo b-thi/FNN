@@ -1,6 +1,37 @@
-# FNN 0.8
-* This r package include many available functions which can be used to build a functional nerual network and solve related problems.
+# FNN 1.1
+
+## To be released
+
+### Notes:
+
+* Dropout added
+* Parallelization to improve model pre-processing
+* Additional options for basis fitting
+
+# FNN 1.0
+
+## Released
+
+### Notes:
+
+* Initial Release with the following functions:
 
 ```R
-# Any r functions can be inserted here.
+# Main model function
+fnn.fit()
+
+# Predict function
+fnn.predict()
+
+# Function weight function
+fnn.fnc()
+
+# Functional response plot function
+fnn.plot()
+
+# Cross-validation function
+fnn.cv()
+
+# Tuning function
+fnn.tune()
 ```
