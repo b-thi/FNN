@@ -106,20 +106,42 @@
 <a href="#fnn" class="anchor"></a>Functional Neural Networks</h1></div>
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
+
+
+                <div>
+                <center> <img src="deriv_gif.gif"style="height:200px;width:800px;border:none;"> </center>
+                <span><center> </center></span>
+                <br/>
+                
+            </div>
 <a href="#introduction" class="anchor"></a>Introduction</h2>
         <p>
-            This package fits neural networks where the form of the neuron is:
+            This package fits the models presented in the paper "Deep Learning with Functional Inputs". A number of functions are provided for the user to fit models, used them for prediction, and extract out important parameters. Tuning and crossvalidation functions are also provided. <br>
+</p>
+
+<p>
+            In this kind of neural network, we have the option to fit models that have inputs which are both scalars and functions. The form of each neuron in this model is:
 
           </p>
 
     <h5 align = "center">
 \begin{align*}
-    v_n^{(1)} &= g\left(\sum_{k = 1}^{K}\int_{\mathcal S} \sum_{m = 1}^{M_k}c_{kmn}\phi_{kmn}(s)x_{k}(s)ds + \sum_{j = 1}^{J}w^{(1)}_{jn}z_{j} + b^{(1)}_n\right)\\
-    &= g\left(\sum_{k = 1}^{K}\sum_{m = 1}^{M_k}c_{kmn}\int_{\mathcal S} \phi_{kmn}(s)x_{k}(s)ds + \sum_{j = 1}^{J}w^{(1)}_{jn}z_{j} + b^{(1)}_n\right).
+\label{eq1}
+    v = g\left(\sum_{k = 1}^{K}\int_{\mathcal T} \beta_{k}(t)x_{k}(t)dt + \sum_{j = 1}^{J}w_{j}z_{j} + b\right),
 \end{align*}
-    </h5> 
-    <p> In other worse, we 
-<p>For more information on the methodology: <a href="https://arxiv.org/abs/2006.09590" class="uri">https://arxiv.org/abs/2006.09590</a></p>
+    </h5>
+    <p> A by-product of the method is a set of dynamic functional weights that can be visualized during the optimization process. This visualization leads to a greater interpretability of the relationship between the covariates and the response relative to conventional neural networks.  </p>
+
+                             <div>
+                <center> <img src="article_gif.gif"style="height:250px;width:700px;border:none;"> </center>
+                <span><center> <i>An example of an interpterable parameter from this approach.</i>  </center></span>
+                <br/>
+
+
+
+<p>For more information on the methodology, read the paper <a href="https://arxiv.org/abs/2006.09590" class="uri">here.</a></p>
+
+<p>For a more intuitive understanding, check out this <a href="https://b-thi.github.io/Posts/FNNs.html" class="uri">article.</a></p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -192,6 +214,8 @@
 
 </div>
   </div>
+
+</div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
