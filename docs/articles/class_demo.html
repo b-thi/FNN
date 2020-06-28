@@ -97,27 +97,100 @@
 
       
 
-      </header><div class="row">
-  <div class="col-md-9 contents">
-    <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Classification Demo</h1>
-            
-      
-      <small class="dont-index">Source: <a href="https://github.com/b-thi/FNN/blob/master/vignettes/FNN_article_temp.Rmd"><code>vignettes/FNN_article_temp.Rmd</code></a></small>
-      <div class="hidden name"><code>FNN_article_temp.Rmd</code></div>
+</header><div class="row">
+  <div class="contents col-md-9">
+<div id="fnn" class="section level1">
+<div id="example" class="section level2">
+<h2 class="hasAnchor">
+<a href="#example" class="anchor"></a>Classification Demo</h2>
+<p>The package functions can be as simple (or complicated) as you want them to be! To illustrate, we’ll use the classic Tecator meat sample dataset for a classification problem.</p>
+<p>First, we’ll read in the data and load some libraries.</p>
+<div class="sourceCode"><pre class="r"><span class="co"># Library</span>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">FNN</span>)
 
-    </div>
+<span class="co"># Loading data</span>
+<span class="no">tecator</span> <span class="kw">=</span> <span class="kw pkg">FNN</span><span class="kw ns">::</span><span class="no"><a href="reference/tecator.html">tecator</a></span></pre></div>
+<p>We’ll do a classification example using meat samples with fat contents &gt; 25 as “high fat” and &lt; 25 as “low fat” as the dependent variable.</p>
+<div class="sourceCode"><pre class="r"><span class="co"># Making classification bins</span>
+<span class="no">tecator_resp</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="no">tecator</span>$<span class="no">y</span>$<span class="no">Fat</span> <span class="kw">&gt;</span> <span class="fl">25</span>, <span class="fl">1</span>, <span class="fl">0</span>))</pre></div>
+<p>We have our response, what about our predictors? Well, to keep it simple, let’s first consider our scalar covariates; we’ll use the water contents of the meat samples as a scalar covariate</p>
+<div class="sourceCode"><pre class="r"><span class="co"># Non functional covariate</span>
+<span class="no">tecator_scalar</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">water</span> <span class="kw">=</span> <span class="no">tecator</span>$<span class="no">y</span>$<span class="no">Water</span>)</pre></div>
+<p>Let’s now add some functional covariates:</p>
+<div class="sourceCode"><pre class="r"><span class="co"># Splitting data</span>
+<span class="no">ind</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fl">1</span>:<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">tecator_resp</span>), <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fl">0.75</span>*<span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="no">tecator_resp</span>)))
+<span class="no">train_x</span> <span class="kw">=</span> <span class="no">tecator</span>$<span class="no">absorp.fdata</span>$<span class="no">data</span>[<span class="no">ind</span>,]
+<span class="no">test_x</span> <span class="kw">=</span> <span class="no">tecator</span>$<span class="no">absorp.fdata</span>$<span class="no">data</span>[-<span class="no">ind</span>,]
+<span class="no">scalar_train</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">tecator_scalar</span>[<span class="no">ind</span>,<span class="fl">1</span>])
+<span class="no">scalar_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">tecator_scalar</span>[-<span class="no">ind</span>,<span class="fl">1</span>])
+<span class="no">train_y</span> <span class="kw">=</span> <span class="no">tecator_resp</span>[<span class="no">ind</span>]
+<span class="no">test_y</span> <span class="kw">=</span> <span class="no">tecator_resp</span>[-<span class="no">ind</span>]</pre></div>
+<p>In the chunk of code above, I split the absorbance curves into a test and train set with a 25/75 split. Since we are doing this the “easy” way, we won’t need to do any pre-processing on the raw absorbance points (of each meat sample). I also split the previously defined scalar covariates and response in the same way.</p>
+<p>Before fitting the model, we need to get the functional covariates in the proper format (okay, so there is a little bit of processing). In the case where we are passing in the raw curve points, we need to pass them in as a list of K dimensions where K is the number of functional covariates. In the situation at hand, we only have one functional covariate so our list will have one element:</p>
+<div class="sourceCode"><pre class="r"><span class="co"># Making list element to pass in</span>
+<span class="no">func_covs_train</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">train_x</span>)
+<span class="no">func_covs_test</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="no">test_x</span>)</pre></div>
+<p>Now we can fit the model!</p>
+<div class="sourceCode"><pre class="r"><span class="co"># Now running model</span>
+<span class="no">fit_class</span> <span class="kw">=</span> <span class="fu"><a href="reference/fnn.fit.html">fnn.fit</a></span>(<span class="kw">resp</span> <span class="kw">=</span> <span class="no">train_y</span>,
+                    <span class="kw">func_cov</span> <span class="kw">=</span> <span class="no">func_covs_train</span>,
+                    <span class="kw">scalar_cov</span> <span class="kw">=</span> <span class="no">scalar_train</span>,
+                    <span class="kw">hidden_layers</span> <span class="kw">=</span> <span class="fl">6</span>,
+                    <span class="kw">neurons_per_layer</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">24</span>, <span class="fl">24</span>, <span class="fl">24</span>, <span class="fl">24</span>, <span class="fl">24</span>, <span class="fl">58</span>),
+                    <span class="kw">activations_in_layers</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"relu"</span>, <span class="st">"relu"</span>, <span class="st">"relu"</span>, <span class="st">"relu"</span>, <span class="st">"relu"</span>, <span class="st">"linear"</span>),
+                    <span class="kw">domain_range</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">850</span>, <span class="fl">1050</span>)),
+                    <span class="kw">learn_rate</span> <span class="kw">=</span> <span class="fl">0.001</span>,
+                    <span class="kw">epochs</span> <span class="kw">=</span> <span class="fl">100</span>,
+                    <span class="kw">raw_data</span> <span class="kw">=</span> <span class="no">T</span>,
+                    <span class="kw">early_stopping</span> <span class="kw">=</span> <span class="no">T</span>)</pre></div>
+<p>Here, we fit a 6 layer model. There are a number of warnings and error checks in place to make sure that all the dimensionality is consistent. The first three inputs are all objects we defined above! Also, observe that raw_data is true here; this is important to indicate as it tells the model function to do the pre-processing.</p>
+<p>Now that we have our model, we can make some predictions:</p>
+<div class="sourceCode"><pre class="r"><span class="co"># Running prediction</span>
+<span class="no">predict_class</span> <span class="kw">=</span> <span class="fu"><a href="reference/fnn.predict.html">fnn.predict</a></span>(<span class="no">fit_class</span>,
+                            <span class="kw">func_cov</span> <span class="kw">=</span> <span class="no">func_covs_test</span>,
+                            <span class="kw">scalar_cov</span> <span class="kw">=</span> <span class="no">scalar_test</span>,
+                            <span class="kw">domain_range</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">850</span>, <span class="fl">1050</span>)),
+                            <span class="kw">raw_data</span> <span class="kw">=</span> <span class="no">T</span>)
 
-    
-    
-<p>This is a not a real demo.</p>
+<span class="co"># Rounding predictions (they are probabilities)</span>
+<span class="no">rounded_preds</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">predict_class</span>)[,<span class="fl">2</span>] <span class="kw">==</span> <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">0</span>)
+
+<span class="co"># Confusion matrix</span>
+<span class="kw pkg">caret</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/caret/man/confusionMatrix.html">confusionMatrix</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">rounded_preds</span>), <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">test_y</span>))</pre></div>
+<p>Not bad.</p>
+<p>Okay that’s all I have for now, have fun!</p>
+</div>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-      </div>
-
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=FNN">https://​cloud.r-project.org/​package=FNN</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/b-thi/FNN/">https://​github.com/​b-thi/​FNN/​</a>
+</li>
+</ul>
+</div>
+<div class="license">
+<h2>License</h2>
+<ul class="list-unstyled">
+<li>`use_mit_license()`</li>
+</ul>
+</div>
+<div class="developers">
+<h2>Developers</h2>
+<ul class="list-unstyled">
+<li>Barinder Thind <br><small class="roles"> Author, maintainer, copyright holder </small>  </li>
+<li>
+<a href="http://people.stat.sfu.ca/~cao/">Jiguo Cao</a> <br><small class="roles"> Author </small>  </li>
+<li><a href="authors.html">All authors...</a></li>
+</ul>
 </div>
 
+  </div>
+</div>
 
 
       <footer><div class="copyright">
@@ -136,3 +209,4 @@
 
   </body>
 </html>
+
