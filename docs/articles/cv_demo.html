@@ -30,8 +30,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">FNN</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8</span>
+        <a class="navbar-link" href="../index.html">FNN </a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version"> 1.0 </span>
       </span>
     </div>
 
@@ -43,27 +43,36 @@
      
   </a>
 </li>
-<li>
-  <a href="../articles/FNN.html">Get started</a>
-</li>
+<!-- <li>
+  <a href="../index.html">Main</a>
+</li> -->
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
+    Demos
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
 <li class="divider">
-    <li class="dropdown-header">Vignettes</li>
+    <li class="dropdown-header">Examples</li>
     <li>
-      <a href="../articles/FNN_vignette_temp.html">Vignette #1</a>
+      <a href="reg_demo.html">Regression Demo</a>
+    </li>
+        <li>
+      <a href="class_demo.html">Classification Demo</a>
+    </li>
+        <li>
+      <a href="cv_demo.html">Cross-validation Demo</a>
+    </li>
+        <li>
+      <a href="tune_demo.html">Tuning Demo</a>
     </li>
     <li class="divider">
     <li>
-      <a href="../articles/index.html">More...</a>
+      <a href="articles/index.html">Upcoming</a>
     </li>
   </ul>
 </li>
@@ -100,199 +109,43 @@
     </div>
 
     
-    
-<div id="crossvalidation-demo" class="section level1">
-<h1 class="hasAnchor">
-<a href="#crossvalidation-demo" class="anchor"></a>Crossvalidation Demo</h1>
-<p>Crossvalidation (cv) is important to quantify the uncertainty in any models predictive power. The FNN package offers an easy and simple implementation of cv for users to apply in their own contexts.</p>
-<p>First, we’ll read in the data and load some libraries.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="co"># Libraries</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">fda</span>)</pre></body></html></div>
-<pre><code>## Loading required package: Matrix</code></pre>
-<pre><code>## 
-## Attaching package: 'fda'</code></pre>
-<pre><code>## The following object is masked from 'package:graphics':
-## 
-##     matplot</code></pre>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">FNN</span>)</pre></body></html></div>
-<pre><code>## Warning: replacing previous import 'caret::train' by 'tensorflow::train' when
-## loading 'FNN'</code></pre>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="co"># Loading data</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="st">"daily"</span>)</pre></body></html></div>
-<p>Before doing anything else, we’re going to do some pre-processing to get our functional observations. Remember, we can let the fnn.fit() function do this for us (as see in the classification example) but, for this example, let’s do it ourselves.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="co"># Creating functional data</span>
-<span class="no">nbasis</span> <span class="kw">=</span> <span class="fl">65</span>
-<span class="no">tempbasis65</span>  <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/fda/man/create.fourier.basis.html">create.fourier.basis</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>,<span class="fl">365</span>), <span class="no">nbasis</span>)
-<span class="no">timepts</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">1</span>, <span class="fl">365</span>, <span class="fl">1</span>)
-<span class="no">temp_fd</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/pkg/fda/man/Data2fd.html">Data2fd</a></span>(<span class="no">timepts</span>, <span class="no">daily</span>$<span class="no">tempav</span>, <span class="no">tempbasis65</span>)</pre></body></html></div>
-<p>In the chunk of code above, we are creating functional observations using a 65 term Fourier basis expansion. The Data2fd() function converts the raw data into the functional data objects that we need. In particular, we are concerned with the coefficients defining each of the 35 functional observations here (one set for each of the 35 cities). Let’s not extract out those functional observations and get them into the format required for the fnn.fit() function:</p>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co"># Non functional covariate</span>
-<span class="no">weather_scalar</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="kw">total_prec</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">daily</span>$<span class="no">precav</span>, <span class="fl">2</span>, <span class="no">sum</span>))
 
-<span class="co"># Setting up data to pass in to function</span>
-<span class="no">weather_data_full</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/array.html">array</a></span>(<span class="kw">dim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="no">nbasis</span>, <span class="fl">35</span>, <span class="fl">1</span>))
-<span class="no">weather_data_full</span>[,,<span class="fl">1</span>] <span class="kw">=</span> <span class="no">temp_fd</span>$<span class="no">coefs</span>
-<span class="no">scalar_full</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">weather_scalar</span>[,<span class="fl">1</span>])
-<span class="no">total_prec</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="no">daily</span>$<span class="no">precav</span>, <span class="fl">2</span>, <span class="no">mean</span>)</pre></body></html></div>
-<p>Above, we first define a scalar covariate in the appropriate matrix format. The scalar covariate is the total amount of rain over the year in each of the cities (feel free to leave this covariate out). We then store the functional curves (and in particular, the coefficients) from the functional object, into a tensor. Here, the tensor is actually just a matrix because we have only 1 functional covariate (temperature curves for the year). Finally, let’s run our cross-valiation function!</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="co"># cross-validating</span>
-<span class="no">cv_example</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/fnn.cv.html">fnn.cv</a></span>(<span class="kw">nfolds</span> <span class="kw">=</span> <span class="fl">5</span>,
-                     <span class="kw">resp</span> <span class="kw">=</span> <span class="no">total_prec</span>,
-                     <span class="kw">func_cov</span> <span class="kw">=</span> <span class="no">weather_data_full</span>,
-                     <span class="kw">scalar_cov</span> <span class="kw">=</span> <span class="no">scalar_full</span>,
-                     <span class="kw">domain_range</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">365</span>)),
-                     <span class="kw">learn_rate</span> <span class="kw">=</span> <span class="fl">0.001</span>)</pre></body></html></div>
-<pre><code>## Model
-## ________________________________________________________________________________
-## Layer (type)                        Output Shape                    Param #     
-## ================================================================================
-## dense (Dense)                       (None, 64)                      576         
-## ________________________________________________________________________________
-## dense_1 (Dense)                     (None, 64)                      4160        
-## ________________________________________________________________________________
-## dense_2 (Dense)                     (None, 1)                       65          
-## ================================================================================
-## Total params: 4,801
-## Trainable params: 4,801
-## Non-trainable params: 0
-## ________________________________________________________________________________
-## 
-## 
-## 
-## xxxxxxxxxxxxxxxxxx</code></pre>
-<p><img src="cv_demo_files/figure-html/unnamed-chunk-4-1.png" width="700"></p>
-<pre><code>## 
-## Trained on 23 samples (batch_size=32, epochs=18)
-## Final epoch (plot to see history):
-##                   loss: 0.8828
-##     mean_squared_error: 0.8828
-##               val_loss: 6.547
-## val_mean_squared_error: 6.547 
-## 
-## [1] "Folds Done: 1"
-## Model
-## ________________________________________________________________________________
-## Layer (type)                        Output Shape                    Param #     
-## ================================================================================
-## dense_3 (Dense)                     (None, 64)                      576         
-## ________________________________________________________________________________
-## dense_4 (Dense)                     (None, 64)                      4160        
-## ________________________________________________________________________________
-## dense_5 (Dense)                     (None, 1)                       65          
-## ================================================================================
-## Total params: 4,801
-## Trainable params: 4,801
-## Non-trainable params: 0
-## ________________________________________________________________________________
-## 
-## 
-## 
-## xxxxxxxxxxxxxxxxx</code></pre>
-<p><img src="cv_demo_files/figure-html/unnamed-chunk-4-2.png" width="700"></p>
-<pre><code>## 
-## Trained on 22 samples (batch_size=32, epochs=17)
-## Final epoch (plot to see history):
-##                   loss: 1.175
-##     mean_squared_error: 1.175
-##               val_loss: 2.242
-## val_mean_squared_error: 2.242 
-## 
-## [1] "Folds Done: 2"
-## Model
-## ________________________________________________________________________________
-## Layer (type)                        Output Shape                    Param #     
-## ================================================================================
-## dense_6 (Dense)                     (None, 64)                      576         
-## ________________________________________________________________________________
-## dense_7 (Dense)                     (None, 64)                      4160        
-## ________________________________________________________________________________
-## dense_8 (Dense)                     (None, 1)                       65          
-## ================================================================================
-## Total params: 4,801
-## Trainable params: 4,801
-## Non-trainable params: 0
-## ________________________________________________________________________________
-## 
-## 
-## 
-## xxxxxxxxxxxxxxxxxxxxxxxx</code></pre>
-<p><img src="cv_demo_files/figure-html/unnamed-chunk-4-3.png" width="700"></p>
-<pre><code>## 
-## Trained on 21 samples (batch_size=32, epochs=24)
-## Final epoch (plot to see history):
-##                   loss: 1.693
-##     mean_squared_error: 1.693
-##               val_loss: 6.536
-## val_mean_squared_error: 6.536 
-## 
-## [1] "Folds Done: 3"
-## Model
-## ________________________________________________________________________________
-## Layer (type)                        Output Shape                    Param #     
-## ================================================================================
-## dense_9 (Dense)                     (None, 64)                      576         
-## ________________________________________________________________________________
-## dense_10 (Dense)                    (None, 64)                      4160        
-## ________________________________________________________________________________
-## dense_11 (Dense)                    (None, 1)                       65          
-## ================================================================================
-## Total params: 4,801
-## Trainable params: 4,801
-## Non-trainable params: 0
-## ________________________________________________________________________________
-## 
-## 
-## 
-## xxxxxxxxxxxxxxxxxxxxxx</code></pre>
-<p><img src="cv_demo_files/figure-html/unnamed-chunk-4-4.png" width="700"></p>
-<pre><code>## 
-## Trained on 22 samples (batch_size=32, epochs=22)
-## Final epoch (plot to see history):
-##                   loss: 1.043
-##     mean_squared_error: 1.043
-##               val_loss: 6.26
-## val_mean_squared_error: 6.26 
-## 
-## [1] "Folds Done: 4"
-## Model
-## ________________________________________________________________________________
-## Layer (type)                        Output Shape                    Param #     
-## ================================================================================
-## dense_12 (Dense)                    (None, 64)                      576         
-## ________________________________________________________________________________
-## dense_13 (Dense)                    (None, 64)                      4160        
-## ________________________________________________________________________________
-## dense_14 (Dense)                    (None, 1)                       65          
-## ================================================================================
-## Total params: 4,801
-## Trainable params: 4,801
-## Non-trainable params: 0
-## ________________________________________________________________________________
-## 
-## 
-## 
-## xxxxxxxxxxxxxxxxxx</code></pre>
-<p><img src="cv_demo_files/figure-html/unnamed-chunk-4-5.png" width="700"></p>
-<pre><code>## 
-## Trained on 22 samples (batch_size=32, epochs=18)
-## Final epoch (plot to see history):
-##                   loss: 2.492
-##     mean_squared_error: 2.492
-##               val_loss: 5.843
-## val_mean_squared_error: 5.843 
-## 
-## [1] "Folds Done: 5"</code></pre>
+<p>Crossvalidation (cv) is important to quantify the uncertainty in any models predictive power. The FNN package offers an easy and simple implementation of cv for users to apply in their own contexts. </p>
+<p>First, we&#39;ll read in the data and load some libraries.</p>
+<pre><code class="lang-r"><span class="hljs-meta"># Libraries</span>
+library(fda)
+
+<span class="hljs-meta"># Loading data</span>
+data(<span class="hljs-string">"daily"</span>)
+</code></pre>
+<p>Before doing anything else, we&#39;re going to do some pre-processing to get our functional observations. Remember, we can let the fnn.fit() function do this for us (as see in the classification example) but, for this example, let&#39;s do it ourselves.</p>
+<pre><code class="lang-r"><span class="hljs-comment"># Creating functional data</span>
+<span class="hljs-attr">nbasis</span> = <span class="hljs-number">65</span>
+<span class="hljs-attr">tempbasis65</span>  = create.fourier.basis(c(<span class="hljs-number">0</span>,<span class="hljs-number">365</span>), nbasis)
+<span class="hljs-attr">timepts</span> = seq(<span class="hljs-number">1</span>, <span class="hljs-number">365</span>, <span class="hljs-number">1</span>)
+<span class="hljs-attr">temp_fd</span> = Data2fd(timepts, daily<span class="hljs-variable">$tempav</span>, tempbasis65)
+</code></pre>
+<p>In the chunk of code above, we are creating functional observations using a 65 term Fourier basis expansion. The Data2fd() function converts the raw data into the functional data objects that we need. In particular, we are concerned with the coefficients defining each of the 35 functional observations here (one set for each of the 35 cities). Let&#39;s not extract out those functional observations and get them into the format required for the fnn.fit() function:</p>
+<pre><code class="lang-r"># Non functional covariate
+weather_scalar = <span class="hljs-keyword">data</span>.frame(total_prec = apply(daily$precav, <span class="hljs-number">2</span>, <span class="hljs-built_in">sum</span>))
+
+# Setting up <span class="hljs-keyword">data</span> to <span class="hljs-keyword">pass</span> <span class="hljs-keyword">in</span> to <span class="hljs-function"><span class="hljs-keyword">function</span></span>
+weather_data_full &lt;- array(<span class="hljs-built_in">dim</span> = c(nbasis, <span class="hljs-number">35</span>, <span class="hljs-number">1</span>))
+weather_data_full[,,<span class="hljs-number">1</span>] = temp_fd$coefs
+scalar_full = <span class="hljs-keyword">data</span>.frame(weather_scalar[,<span class="hljs-number">1</span>])
+total_prec = apply(daily$precav, <span class="hljs-number">2</span>, mean)
+</code></pre>
+<p>Above, we first define a scalar covariate in the appropriate matrix format. The scalar covariate is the total amount of rain over the year in each of the cities (feel free to leave this covariate out). We then store the functional curves (and in particular, the coefficients) from the functional object, into a tensor. Here, the tensor is actually just a matrix because we have only 1 functional covariate (temperature curves for the year). Finally, let&#39;s run our cross-valiation function!</p>
+<pre><code class="lang-r"><span class="hljs-comment"># cross-validating</span>
+cv_example &lt;- fnn.cv(<span class="hljs-attr">nfolds</span> = <span class="hljs-number">5</span>,
+                     <span class="hljs-attr">resp</span> = total_prec,
+                     <span class="hljs-attr">func_cov</span> = weather_data_full,
+                     <span class="hljs-attr">scalar_cov</span> = scalar_full,
+                     <span class="hljs-attr">domain_range</span> = list(c(<span class="hljs-number">1</span>, <span class="hljs-number">365</span>)),
+                     <span class="hljs-attr">learn_rate</span> = <span class="hljs-number">0.001</span>)
+</code></pre>
 <p>We can adjust the number of folds with nfolds option. We leave the model at its defaults but you can definitely improve the model fitting across the folds with a more appropriate number of layers, neurons, etc.</p>
-</div>
-  </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-
-        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
-    </nav>
-</div>
-
-</div>
 
 
 
