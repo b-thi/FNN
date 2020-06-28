@@ -8,10 +8,12 @@
 
 <title>Changelog • FNN</title>
 
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -36,7 +38,9 @@
 
 
 
+
 <meta property="og:title" content="Changelog" />
+
 
 
 
@@ -66,49 +70,40 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">FNN </a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version"> 1.0 </span>
+        <a class="navbar-link" href="../index.html">FNN</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
+        <li>
   <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
-<!-- <li>
-  <a href="../index.html">Main</a>
-</li> -->
+<li>
+  <a href="../articles/FNN.html">Get started</a>
+</li>
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Demos
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">Examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Vignettes</li>
     <li>
-      <a href="../articles/reg_demo.html">Regression Demo</a>
+      <a href="../articles/FNN_vignette_temp.html">Vignette #1</a>
     </li>
-        <li>
-      <a href="../articles/class_demo.html">Classification Demo</a>
-    </li>
-        <li>
-      <a href="../articles/cv_demo.html">Cross-validation Demo</a>
-    </li>
-        <li>
-      <a href="../articles/tune_demo.html">Tuning Demo</a>
-    </li>
-    <li class="divider">
+    <li class="divider"></li>
     <li>
-      <a href="articles/index.html">Upcoming</a>
+      <a href="../articles/index.html">More...</a>
     </li>
   </ul>
 </li>
@@ -116,20 +111,19 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
   <a href="https://github.com/b-thi/FNN/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-</div>
-<!--/.nav-collapse -->
-  </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+      
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
       
 
       </header>
@@ -141,14 +135,56 @@
       <small>Source: <a href='https://github.com/b-thi/FNN/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="fnn-0-8" class="section level1">
-<h1 class="page-header" data-toc-text="0.8">
-<a href="#fnn-0-8" class="anchor"></a>FNN 0.8<small> Unreleased </small>
+    <div id="fnn-11" class="section level1">
+<h1 class="page-header" data-toc-text="1.1">
+<a href="#fnn-11" class="anchor"></a>FNN 1.1<small> 2013-07-31 </small>
 </h1>
+<div id="to-be-released" class="section level2">
+<h2 class="hasAnchor">
+<a href="#to-be-released" class="anchor"></a>To be released</h2>
+<div id="notes" class="section level3">
+<h3 class="hasAnchor">
+<a href="#notes" class="anchor"></a>Notes:</h3>
 <ul>
-<li>This r package include many available functions which can be used to build a functional nerual network and solve related problems.</li>
+<li>Dropout added</li>
+<li>Parallelization to improve model pre-processing</li>
+<li>Additional options for basis fitting</li>
 </ul>
-<div class="sourceCode"><pre class="r"># Any r functions can be inserted here.</pre></div>
+</div>
+</div>
+</div>
+    <div id="fnn-10" class="section level1">
+<h1 class="page-header" data-toc-text="1.0">
+<a href="#fnn-10" class="anchor"></a>FNN 1.0<small> 2013-05-19 </small>
+</h1>
+<div id="released" class="section level2">
+<h2 class="hasAnchor">
+<a href="#released" class="anchor"></a>Released</h2>
+<div id="notes-1" class="section level3">
+<h3 class="hasAnchor">
+<a href="#notes-1" class="anchor"></a>Notes:</h3>
+<ul>
+<li>Initial Release with the following functions:</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="co"># Main model function</span>
+<span class="fu"><a href="../reference/fnn.fit.html">fnn.fit</a></span>()
+
+<span class="co"># Predict function</span>
+<span class="fu"><a href="../reference/fnn.predict.html">fnn.predict</a></span>()
+
+<span class="co"># Function weight function</span>
+<span class="fu"><a href="../reference/fnn.fnc.html">fnn.fnc</a></span>()
+
+<span class="co"># Functional response plot function</span>
+<span class="fu"><a href="../reference/fnn.plot.html">fnn.plot</a></span>()
+
+<span class="co"># Cross-validation function</span>
+<span class="fu"><a href="../reference/fnn.cv.html">fnn.cv</a></span>()
+
+<span class="co"># Tuning function</span>
+<span class="fu"><a href="../reference/fnn.tune.html">fnn.tune</a></span>()</pre></div>
+</div>
+</div>
 </div>
   </div>
 

@@ -32,4 +32,6 @@ articles:
 - title: Demos
   desc: Demos aims to help you better apply this package.
   contents:
-  - FNN_article_temp
+  - tune_demo
+  - reg_demo
+  - cv_demo
