@@ -104,8 +104,23 @@
 <div id="fnn" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#fnn" class="anchor"></a>Deep Learning with Functional Inputs</h1></div>
-<p>This package allows the user to build models of the form: $$f(z, g(x) | θ)$$ where f() is a neural network, z is a vector of scalar covariates, and g(x) is a vector of functional covariates. These are also known as functional neural networks (FNNs). The package is built on top of the Keras/Tensorflow architecture.</p>
+<div id="introduction" class="section level2">
+<h2 class="hasAnchor">
+<a href="#introduction" class="anchor"></a>Introduction</h2>
+        <p>
+            This package fits neural networks where the form of the neuron is:
+
+          </p>
+
+    <h5 align = "center">
+\begin{align*}
+    v_n^{(1)} &= g\left(\sum_{k = 1}^{K}\int_{\mathcal S} \sum_{m = 1}^{M_k}c_{kmn}\phi_{kmn}(s)x_{k}(s)ds + \sum_{j = 1}^{J}w^{(1)}_{jn}z_{j} + b^{(1)}_n\right)\\
+    &= g\left(\sum_{k = 1}^{K}\sum_{m = 1}^{M_k}c_{kmn}\int_{\mathcal S} \phi_{kmn}(s)x_{k}(s)ds + \sum_{j = 1}^{J}w^{(1)}_{jn}z_{j} + b^{(1)}_n\right).
+\end{align*}
+    </h5> 
+    <p> In other worse, we 
 <p>For more information on the methodology: <a href="https://arxiv.org/abs/2006.09590" class="uri">https://arxiv.org/abs/2006.09590</a></p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -113,6 +128,67 @@
 <div class="sourceCode"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">devtools</span>)
 <span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"b-thi/FNN"</span>)</pre></div>
 </div>
+<div id="authors" class="section level2">
+<h2 class="hasAnchor">
+<a href="#authors" class="anchor"></a>About the Authors</h2>
+<p> Information on each of the authors is provided below: </p>
+
+<style type="text/css">
+.tg  {border-collapse:collapse;border-color:#93a1a1;border-spacing:0;}
+.tg td{background-color:#fdf6e3;border-bottom-width:1px;border-color:#93a1a1;border-style:solid;border-top-width:1px;
+  border-width:0px;color:#002b36;font-family:Arial, sans-serif;font-size:14px;overflow:hidden;padding:10px 5px;
+  word-break:normal;}
+.tg th{background-color:#657b83;border-bottom-width:1px;border-color:#93a1a1;border-style:solid;border-top-width:1px;
+  border-width:0px;color:#fdf6e3;font-family:Arial, sans-serif;font-size:14px;font-weight:normal;overflow:hidden;
+  padding:10px 5px;word-break:normal;}
+.tg .tg-6y75{background-color:#000000;color:#ffffff;font-weight:bold;text-align:left;vertical-align:top}
+.tg .tg-0lax{text-align:left;vertical-align:top}
+</style>
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-6y75">Author</th>
+    <th class="tg-6y75">Website</th>
+    <th class="tg-6y75">LinkedIn</th>
+    <th class="tg-6y75">GitHub</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0lax">Barinder Thind</td>
+    <td class="tg-0lax"><a href="http://b-thi.github.io">Link</a></td>
+    <td class="tg-0lax"><a href="https://www.linkedin.com/in/b-thind/">Link</a></td>
+    <td class="tg-0lax"><a href="https://github.com/b-thi">Link</a></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Jiguo Cao</td>
+    <td class="tg-0lax"><a href="http://people.stat.sfu.ca/~cao/">Link</a></td>
+    <td class="tg-0lax"></td>
+    <td class="tg-0lax"><a href="https://github.com/caojiguo">Link</a></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Sidi Wu</td>
+    <td class="tg-0lax"></td>
+    <td class="tg-0lax"></td>
+    <td class="tg-0lax"><a href="https://github.com/sidiwu">Link</a></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Richard Groenewald&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td class="tg-0lax"></td>
+    <td class="tg-0lax"></td>
+    <td class="tg-0lax"><a href="https://github.com/richardgroenewald">Link</a></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">Kevin Multani</td>
+    <td class="tg-0lax"></td>
+    <td class="tg-0lax"><a href="https://www.linkedin.com/in/kmultani/">Link</a></td>
+    <td class="tg-0lax"></td>
+  </tr>
+</tbody>
+</table>
+</div>
+
+
 
 </div>
   </div>
@@ -167,4 +243,27 @@
 
 
   </body>
+
+  <script type="text/javascript" async
+  src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [["$", "$"], ["\\(", "\\)"]],
+        processEscapes: true,
+    },
+    "SVG": {
+        linebreaks: {
+            automatic: true
+        }
+    },
+    "HTML-CSS": {
+      linebreaks: {
+          automatic: true
+        }
+    }
+});
+</script>
 </html>
