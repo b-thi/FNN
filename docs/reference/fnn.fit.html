@@ -72,49 +72,37 @@ with a generalized input space." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">FNN </a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version"> 1.0 </span>
+        <a class="navbar-link" href="../index.html">FNN</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
+        <li>
   <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
-<!-- <li>
-  <a href="../index.html">Main</a>
-</li> -->
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Demos
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">Examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Vignettes</li>
     <li>
-      <a href="../articles/reg_demo.html">Regression Demo</a>
+      <a href="../articles/FNN_vignette_temp.html">Vignette #1</a>
     </li>
-        <li>
-      <a href="../articles/class_demo.html">Classification Demo</a>
-    </li>
-        <li>
-      <a href="../articles/cv_demo.html">Cross-validation Demo</a>
-    </li>
-        <li>
-      <a href="../articles/tune_demo.html">Tuning Demo</a>
-    </li>
-    <li class="divider">
+    <li class="divider"></li>
     <li>
-      <a href="../articles/index.html">Upcoming</a>
+      <a href="../articles/index.html">More...</a>
     </li>
   </ul>
 </li>
@@ -122,20 +110,19 @@ with a generalized input space." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
+      
+      <ul class="nav navbar-nav navbar-right">
+        <li>
   <a href="https://github.com/b-thi/FNN/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-</div>
-<!--/.nav-collapse -->
-  </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+      
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
 
       
 
@@ -310,7 +297,173 @@ This returns those functions.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
+    <pre class="examples"><span class='co'># First, an easy example with raw_data = T</span>
+
+<span class='co'># Loading in data</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"daily"</span>)
+
+<span class='co'># Functional covariates</span>
+<span class='no'>temp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>daily</span>$<span class='no'>tempav</span>)
+<span class='no'>precip</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>daily</span>$<span class='no'>precav</span>)
+<span class='no'>longtidunal_dat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>temp</span>, <span class='no'>precip</span>)
+
+<span class='co'># Scalar Response</span>
+<span class='no'>total_prec</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>daily</span>$<span class='no'>precav</span>, <span class='fl'>2</span>, <span class='no'>mean</span>)
+
+<span class='co'># Running model</span>
+<span class='no'>fit1</span> <span class='kw'>=</span> <span class='fu'>fnn.fit</span>(<span class='kw'>resp</span> <span class='kw'>=</span> <span class='no'>total_prec</span>,
+               <span class='kw'>func_cov</span> <span class='kw'>=</span> <span class='no'>longtidunal_dat</span>,
+               <span class='kw'>scalar_cov</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+               <span class='kw'>learn_rate</span> <span class='kw'>=</span> <span class='fl'>0.0001</span>,
+               <span class='kw'>raw_data</span> <span class='kw'>=</span> <span class='no'>T</span>)
+
+<span class='co'># Classification Example with raw_data = T</span>
+
+<span class='co'># Loading data</span>
+<span class='no'>tecator</span> <span class='kw'>=</span> <span class='kw pkg'>FNN</span><span class='kw ns'>::</span><span class='no'><a href='tecator.html'>tecator</a></span>
+
+<span class='co'># Making classification bins</span>
+<span class='no'>tecator_resp</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='no'>tecator</span>$<span class='no'>y</span>$<span class='no'>Fat</span> <span class='kw'>&gt;</span> <span class='fl'>25</span>, <span class='fl'>1</span>, <span class='fl'>0</span>))
+
+<span class='co'># Non functional covariate</span>
+<span class='no'>tecator_scalar</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>water</span> <span class='kw'>=</span> <span class='no'>tecator</span>$<span class='no'>y</span>$<span class='no'>Water</span>)
+
+<span class='co'># Splitting data</span>
+<span class='no'>ind</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>1</span>:<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>tecator_resp</span>), <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fl'>0.75</span>*<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>tecator_resp</span>)))
+<span class='no'>train_y</span> <span class='kw'>=</span> <span class='no'>tecator_resp</span>[<span class='no'>ind</span>]
+<span class='no'>test_y</span> <span class='kw'>=</span> <span class='no'>tecator_resp</span>[-<span class='no'>ind</span>]
+<span class='no'>train_x</span> <span class='kw'>=</span> <span class='no'>tecator</span>$<span class='no'>absorp.fdata</span>$<span class='no'>data</span>[<span class='no'>ind</span>,]
+<span class='no'>test_x</span> <span class='kw'>=</span> <span class='no'>tecator</span>$<span class='no'>absorp.fdata</span>$<span class='no'>data</span>[-<span class='no'>ind</span>,]
+<span class='no'>scalar_train</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>tecator_scalar</span>[<span class='no'>ind</span>,<span class='fl'>1</span>])
+<span class='no'>scalar_test</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>tecator_scalar</span>[-<span class='no'>ind</span>,<span class='fl'>1</span>])
+
+<span class='co'># Making list element to pass in</span>
+<span class='no'>func_covs_train</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>train_x</span>)
+<span class='no'>func_covs_test</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='no'>test_x</span>)
+
+<span class='co'># Now running model</span>
+<span class='no'>fit_class</span> <span class='kw'>=</span> <span class='fu'>fnn.fit</span>(<span class='kw'>resp</span> <span class='kw'>=</span> <span class='no'>train_y</span>,
+                    <span class='kw'>func_cov</span> <span class='kw'>=</span> <span class='no'>func_covs_train</span>,
+                    <span class='kw'>scalar_cov</span> <span class='kw'>=</span> <span class='no'>scalar_train</span>,
+                    <span class='kw'>hidden_layers</span> <span class='kw'>=</span> <span class='fl'>6</span>,
+                    <span class='kw'>neurons_per_layer</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>24</span>, <span class='fl'>24</span>, <span class='fl'>24</span>, <span class='fl'>24</span>, <span class='fl'>24</span>, <span class='fl'>58</span>),
+                    <span class='kw'>activations_in_layers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"relu"</span>, <span class='st'>"relu"</span>, <span class='st'>"relu"</span>, <span class='st'>"relu"</span>, <span class='st'>"relu"</span>, <span class='st'>"linear"</span>),
+                    <span class='kw'>domain_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>)),
+                    <span class='kw'>learn_rate</span> <span class='kw'>=</span> <span class='fl'>0.001</span>,
+                    <span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>100</span>,
+                    <span class='kw'>raw_data</span> <span class='kw'>=</span> <span class='no'>T</span>,
+                    <span class='kw'>early_stopping</span> <span class='kw'>=</span> <span class='no'>T</span>)
+
+<span class='co'># Running prediction, gets probabilities</span>
+<span class='no'>predict_class</span> <span class='kw'>=</span> <span class='fu'><a href='fnn.predict.html'>fnn.predict</a></span>(<span class='no'>fit_class</span>,
+                            <span class='kw'>func_cov</span> <span class='kw'>=</span> <span class='no'>func_covs_test</span>,
+                            <span class='kw'>scalar_cov</span> <span class='kw'>=</span> <span class='no'>scalar_test</span>,
+                            <span class='kw'>domain_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>)),
+                            <span class='kw'>raw_data</span> <span class='kw'>=</span> <span class='no'>T</span>)
+
+<span class='co'># Example with Pre-Processing (raw_data = F)</span>
+
+<span class='co'># loading data</span>
+<span class='no'>tecator</span> <span class='kw'>=</span> <span class='kw pkg'>FNN</span><span class='kw ns'>::</span><span class='no'><a href='tecator.html'>tecator</a></span>
+
+<span class='co'># libraries</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>fda</span>)
+
+<span class='co'># define the time points on which the functional predictor is observed.</span>
+<span class='no'>timepts</span> <span class='kw'>=</span> <span class='no'>tecator</span>$<span class='no'>absorp.fdata</span>$<span class='no'>argvals</span>
+
+<span class='co'># define the fourier basis</span>
+<span class='no'>nbasis</span> <span class='kw'>=</span> <span class='fl'>29</span>
+<span class='no'>spline_basis</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/fda/man/create.fourier.basis.html'>create.fourier.basis</a></span>(<span class='no'>tecator</span>$<span class='no'>absorp.fdata</span>$<span class='no'>rangeval</span>, <span class='no'>nbasis</span>)
+
+<span class='co'># convert the functional predictor into a fda object and getting deriv</span>
+<span class='no'>tecator_fd</span> <span class='kw'>=</span>  <span class='fu'><a href='https://rdrr.io/pkg/fda/man/Data2fd.html'>Data2fd</a></span>(<span class='no'>timepts</span>, <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>tecator</span>$<span class='no'>absorp.fdata</span>$<span class='no'>data</span>), <span class='no'>spline_basis</span>)
+<span class='no'>tecator_deriv</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/fda/man/deriv.fd.html'>deriv.fd</a></span>(<span class='no'>tecator_fd</span>)
+<span class='no'>tecator_deriv2</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/fda/man/deriv.fd.html'>deriv.fd</a></span>(<span class='no'>tecator_deriv</span>)
+
+<span class='co'># Non functional covariate</span>
+<span class='no'>tecator_scalar</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>water</span> <span class='kw'>=</span> <span class='no'>tecator</span>$<span class='no'>y</span>$<span class='no'>Water</span>)
+
+<span class='co'># Response</span>
+<span class='no'>tecator_resp</span> <span class='kw'>=</span> <span class='no'>tecator</span>$<span class='no'>y</span>$<span class='no'>Fat</span>
+
+<span class='co'># Getting data into right format</span>
+<span class='no'>tecator_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>nbasis</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>tecator_resp</span>), <span class='fl'>3</span>))
+<span class='no'>tecator_data</span>[,,<span class='fl'>1</span>] <span class='kw'>=</span> <span class='no'>tecator_fd</span>$<span class='no'>coefs</span>
+<span class='no'>tecator_data</span>[,,<span class='fl'>2</span>] <span class='kw'>=</span> <span class='no'>tecator_deriv</span>$<span class='no'>coefs</span>
+<span class='no'>tecator_data</span>[,,<span class='fl'>3</span>] <span class='kw'>=</span> <span class='no'>tecator_deriv2</span>$<span class='no'>coefs</span>
+
+<span class='co'># Splitting into test and train for third FNN</span>
+<span class='no'>ind</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>165</span>
+<span class='no'>tec_data_train</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>nbasis</span>, <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>ind</span>), <span class='fl'>3</span>))
+<span class='no'>tec_data_test</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>nbasis</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>tecator</span>$<span class='no'>absorp.fdata</span>$<span class='no'>data</span>) - <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>ind</span>), <span class='fl'>3</span>))
+<span class='no'>tec_data_train</span> <span class='kw'>=</span> <span class='no'>tecator_data</span>[, <span class='no'>ind</span>, ]
+<span class='no'>tec_data_test</span> <span class='kw'>=</span> <span class='no'>tecator_data</span>[, -<span class='no'>ind</span>, ]
+<span class='no'>tecResp_train</span> <span class='kw'>=</span> <span class='no'>tecator_resp</span>[<span class='no'>ind</span>]
+<span class='no'>tecResp_test</span> <span class='kw'>=</span> <span class='no'>tecator_resp</span>[-<span class='no'>ind</span>]
+<span class='no'>scalar_train</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>tecator_scalar</span>[<span class='no'>ind</span>,<span class='fl'>1</span>])
+<span class='no'>scalar_test</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>tecator_scalar</span>[-<span class='no'>ind</span>,<span class='fl'>1</span>])
+
+<span class='co'># Setting up network</span>
+<span class='no'>tecator_fnn</span> <span class='kw'>=</span> <span class='fu'>fnn.fit</span>(<span class='kw'>resp</span> <span class='kw'>=</span> <span class='no'>tecResp_train</span>,
+                      <span class='kw'>func_cov</span> <span class='kw'>=</span> <span class='no'>tec_data_train</span>,
+                      <span class='kw'>scalar_cov</span> <span class='kw'>=</span> <span class='no'>scalar_train</span>,
+                      <span class='kw'>basis_choice</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fourier"</span>, <span class='st'>"fourier"</span>, <span class='st'>"fourier"</span>),
+                      <span class='kw'>num_basis</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>5</span>, <span class='fl'>7</span>),
+                      <span class='kw'>hidden_layers</span> <span class='kw'>=</span> <span class='fl'>4</span>,
+                      <span class='kw'>neurons_per_layer</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>64</span>, <span class='fl'>64</span>, <span class='fl'>64</span>, <span class='fl'>64</span>),
+                      <span class='kw'>activations_in_layers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"relu"</span>, <span class='st'>"relu"</span>, <span class='st'>"relu"</span>, <span class='st'>"linear"</span>),
+                      <span class='kw'>domain_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>850</span>, <span class='fl'>1050</span>)),
+                      <span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>300</span>,
+                      <span class='kw'>learn_rate</span> <span class='kw'>=</span> <span class='fl'>0.002</span>)
+
+<span class='co'># Prediction example can be seen with ?fnn.fit()</span>
+
+<span class='co'># Functional Response Example:</span>
+
+<span class='co'># libraries</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>fda</span>)
+
+<span class='co'># Loading data</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"daily"</span>)
+
+<span class='co'># Creating functional data</span>
+<span class='no'>temp_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>65</span>, <span class='fl'>35</span>, <span class='fl'>1</span>))
+<span class='no'>tempbasis65</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/fda/man/create.fourier.basis.html'>create.fourier.basis</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>365</span>), <span class='fl'>65</span>)
+<span class='no'>tempbasis7</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/fda/man/create.bspline.basis.html'>create.bspline.basis</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>365</span>), <span class='fl'>7</span>, <span class='kw'>norder</span> <span class='kw'>=</span> <span class='fl'>4</span>)
+<span class='no'>timepts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>365</span>, <span class='fl'>1</span>)
+<span class='no'>temp_fd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/fda/man/Data2fd.html'>Data2fd</a></span>(<span class='no'>timepts</span>, <span class='no'>daily</span>$<span class='no'>tempav</span>, <span class='no'>tempbasis65</span>)
+<span class='no'>prec_fd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/fda/man/Data2fd.html'>Data2fd</a></span>(<span class='no'>timepts</span>, <span class='no'>daily</span>$<span class='no'>precav</span>, <span class='no'>tempbasis7</span>)
+<span class='no'>prec_fd</span>$<span class='no'>coefs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/scale.html'>scale</a></span>(<span class='no'>prec_fd</span>$<span class='no'>coefs</span>)
+
+<span class='co'># Data set up</span>
+<span class='no'>temp_data</span>[,,<span class='fl'>1</span>] <span class='kw'>=</span> <span class='no'>temp_fd</span>$<span class='no'>coefs</span>
+<span class='no'>resp_mat</span> <span class='kw'>=</span> <span class='no'>prec_fd</span>$<span class='no'>coefs</span>
+
+<span class='co'># Non functional covariate</span>
+<span class='no'>weather_scalar</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>total_prec</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>daily</span>$<span class='no'>precav</span>, <span class='fl'>2</span>, <span class='no'>sum</span>))
+
+<span class='co'># Getting data into proper format</span>
+<span class='no'>ind</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>30</span>
+<span class='no'>nbasis</span> <span class='kw'>=</span> <span class='fl'>65</span>
+<span class='no'>weather_data_train</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>nbasis</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span>(<span class='no'>temp_data</span>), <span class='fl'>1</span>))
+<span class='no'>weather_data_train</span>[,,<span class='fl'>1</span>] <span class='kw'>=</span> <span class='no'>temp_data</span>
+<span class='no'>scalar_train</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>weather_scalar</span>[,<span class='fl'>1</span>])
+<span class='no'>resp_train</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/t.html'>t</a></span>(<span class='no'>resp_mat</span>)
+
+<span class='co'># Running model</span>
+<span class='no'>weather_func_fnn</span> <span class='kw'>&lt;-</span> <span class='fu'>fnn.fit</span>(<span class='kw'>resp</span> <span class='kw'>=</span> <span class='no'>resp_train</span>,
+                            <span class='kw'>func_cov</span> <span class='kw'>=</span> <span class='no'>weather_data_train</span>,
+                            <span class='kw'>scalar_cov</span> <span class='kw'>=</span> <span class='no'>scalar_train</span>,
+                            <span class='kw'>basis_choice</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"bspline"</span>),
+                            <span class='kw'>num_basis</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>7</span>),
+                            <span class='kw'>hidden_layers</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+                            <span class='kw'>neurons_per_layer</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1024</span>, <span class='fl'>1024</span>),
+                            <span class='kw'>activations_in_layers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"sigmoid"</span>, <span class='st'>"linear"</span>),
+                            <span class='kw'>domain_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>365</span>)),
+                            <span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fl'>300</span>,
+                            <span class='kw'>learn_rate</span> <span class='kw'>=</span> <span class='fl'>0.01</span>,
+                            <span class='kw'>func_resp_method</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -322,7 +475,7 @@ This returns those functions.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://b-thi.github.io/'>Barinder Thind</a> <br> Funded by <a href='http://people.stat.sfu.ca/~cao/'>Jiguo Cao</a>.</p>
+  <p>Developed by Barinder Thind, <a href='http://people.stat.sfu.ca/~cao/'>Jiguo Cao</a>.</p>
 </div>
 
 <div class="pkgdown">

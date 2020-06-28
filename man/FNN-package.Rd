@@ -17,6 +17,7 @@ To be updated.
 Useful links:
 \itemize{
   \item \url{https://arxiv.org/abs/2006.09590}
+  \item \url{https://github.com/b-thi/FNN}
 }
 
 }

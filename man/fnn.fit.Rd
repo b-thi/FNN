@@ -118,7 +118,7 @@ with a generalized input space.
 Updates coming soon.
 }
 \examples{
-First, an easy example with raw_data = T
+# First, an easy example with raw_data = T
 
 # Loading in data
 data("daily")
@@ -138,7 +138,7 @@ fit1 = fnn.fit(resp = total_prec,
                learn_rate = 0.0001,
                raw_data = T)
 
-Classification Example with raw_data = T
+# Classification Example with raw_data = T
 
 # Loading data
 tecator = FNN::tecator
@@ -182,7 +182,7 @@ predict_class = fnn.predict(fit_class,
                             domain_range = list(c(850, 1050)),
                             raw_data = T)
 
-Example with Pre-Processing (raw_data = F)
+# Example with Pre-Processing (raw_data = F)
 
 # loading data
 tecator = FNN::tecator
@@ -238,9 +238,9 @@ tecator_fnn = fnn.fit(resp = tecResp_train,
                       epochs = 300,
                       learn_rate = 0.002)
 
-Prediction example can be seen with ?fnn.fit()
+# Prediction example can be seen with ?fnn.fit()
 
-Functional Response Example:
+# Functional Response Example:
 
 # libraries
 library(fda)

@@ -59,7 +59,7 @@ The prediction function associated with the fnn model allowing for users to quic
 No additional details for now.
 }
 \examples{
-First, we do an example with a scalar response:
+# First, we do an example with a scalar response:
 
 # loading data
 tecator = FNN::tecator
@@ -123,7 +123,7 @@ pred_tec = fnn.predict(tecator_fnn,
                        num_basis = c(5, 5, 7),
                        domain_range = list(c(850, 1050), c(850, 1050), c(850, 1050)))
 
-Now an example with functional responses
+# Now an example with functional responses
 
 # libraries
 library(fda)
@@ -184,7 +184,7 @@ predictions = fnn.predict(weather_func_fnn,
 # Looking at predictions
 predictions
 
-Classification Prediction
+# Classification Prediction
 
 # Loading data
 tecator = FNN::tecator

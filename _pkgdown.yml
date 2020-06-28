@@ -27,10 +27,9 @@ articles:
 - title: Vignettes
   navbar: Vignettes
   contents:
-  - FNN
   - FNN_vignette_temp
 - title: Demos
-  desc: Demos aims to help you better apply this package.
+  desc: Demos aim to help you better apply this package.
   contents:
   - tune_demo
   - reg_demo

@@ -65,7 +65,7 @@
 #' # Obtaining response
 #' total_prec = apply(daily$precav, 2, mean)
 #'
-#' Creating functional data
+#' # Creating functional data
 #' temp_data = array(dim = c(65, 35, 1))
 #' tempbasis65  = create.fourier.basis(c(0,365), 65)
 #' timepts = seq(1, 365, 1)

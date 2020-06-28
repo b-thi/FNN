@@ -41,7 +41,7 @@
 #' internally take care of that pre-processing.
 #'
 #' @examples
-#' First, we do an example with a scalar response:
+#' # First, we do an example with a scalar response:
 #'
 #' # loading data
 #' tecator = FNN::tecator
@@ -105,7 +105,7 @@
 #'                        num_basis = c(5, 5, 7),
 #'                        domain_range = list(c(850, 1050), c(850, 1050), c(850, 1050)))
 #'
-#' Now an example with functional responses
+#' # Now an example with functional responses
 #'
 #' # libraries
 #' library(fda)
@@ -166,7 +166,7 @@
 #' # Looking at predictions
 #' predictions
 #'
-#' Classification Prediction
+#' # Classification Prediction
 #'
 #' # Loading data
 #' tecator = FNN::tecator

@@ -72,49 +72,37 @@ This function only works for scalar responses." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">FNN </a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version"> 1.0 </span>
+        <a class="navbar-link" href="../index.html">FNN</a>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
+        <li>
   <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
-<!-- <li>
-  <a href="../index.html">Main</a>
-</li> -->
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Demos
+    Articles
      
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
-<li class="divider">
-    <li class="dropdown-header">Examples</li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Vignettes</li>
     <li>
-      <a href="../articles/reg_demo.html">Regression Demo</a>
+      <a href="../articles/FNN_vignette_temp.html">Vignette #1</a>
     </li>
-        <li>
-      <a href="../articles/class_demo.html">Classification Demo</a>
-    </li>
-        <li>
-      <a href="../articles/cv_demo.html">Cross-validation Demo</a>
-    </li>
-        <li>
-      <a href="../articles/tune_demo.html">Tuning Demo</a>
-    </li>
-    <li class="divider">
+    <li class="divider"></li>
     <li>
-      <a href="../articles/index.html">Upcoming</a>
+      <a href="../articles/index.html">More...</a>
     </li>
   </ul>
 </li>
@@ -122,20 +110,19 @@ This function only works for scalar responses." />
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right">
-<li>
+      
+      <ul class="nav navbar-nav navbar-right">
+        <li>
   <a href="https://github.com/b-thi/FNN/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
       </ul>
-</div>
-<!--/.nav-collapse -->
-  </div>
-<!--/.container -->
-</div>
-<!--/.navbar -->
+      
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
 
       
 
@@ -250,7 +237,44 @@ corresponds to a different choice of number of hidden layers.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
+    <pre class="examples"><span class='co'># libraries</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>fda</span>)
+
+<span class='co'># Loading data</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='st'>"daily"</span>)
+
+<span class='co'># Obtaining response</span>
+<span class='no'>total_prec</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/apply.html'>apply</a></span>(<span class='no'>daily</span>$<span class='no'>precav</span>, <span class='fl'>2</span>, <span class='no'>mean</span>)
+
+<span class='co'># Creating functional data</span>
+<span class='no'>temp_data</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/array.html'>array</a></span>(<span class='kw'>dim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>65</span>, <span class='fl'>35</span>, <span class='fl'>1</span>))
+<span class='no'>tempbasis65</span>  <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/fda/man/create.fourier.basis.html'>create.fourier.basis</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>,<span class='fl'>365</span>), <span class='fl'>65</span>)
+<span class='no'>timepts</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>1</span>, <span class='fl'>365</span>, <span class='fl'>1</span>)
+<span class='no'>temp_fd</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/fda/man/Data2fd.html'>Data2fd</a></span>(<span class='no'>timepts</span>, <span class='no'>daily</span>$<span class='no'>tempav</span>, <span class='no'>tempbasis65</span>)
+
+<span class='co'># Data set up</span>
+<span class='no'>temp_data</span>[,,<span class='fl'>1</span>] <span class='kw'>=</span> <span class='no'>temp_fd</span>$<span class='no'>coefs</span>
+
+<span class='co'># Creating grid</span>
+<span class='no'>tune_list_weather</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>num_hidden_layers</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2</span>),
+                         <span class='kw'>neurons</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>8</span>, <span class='fl'>16</span>),
+                         <span class='kw'>epochs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>250</span>),
+                         <span class='kw'>val_split</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.2</span>),
+                         <span class='kw'>patience</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>15</span>),
+                         <span class='kw'>learn_rate</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.01</span>, <span class='fl'>0.1</span>),
+                         <span class='kw'>num_basis</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>7</span>),
+                         <span class='kw'>activation_choice</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"relu"</span>, <span class='st'>"sigmoid"</span>))
+
+<span class='co'># Running Tuning</span>
+<span class='no'>weather_tuned</span> <span class='kw'>=</span> <span class='fu'>fnn.tune</span>(<span class='no'>tune_list_weather</span>,
+                         <span class='no'>total_prec</span>,
+                         <span class='no'>temp_data</span>,
+                         <span class='kw'>basis_choice</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"fourier"</span>),
+                         <span class='kw'>domain_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>24</span>)),
+                         <span class='kw'>nfolds</span> <span class='kw'>=</span> <span class='fl'>2</span>)
+
+<span class='co'># Looking at results</span>
+<span class='no'>weather_tuned</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -262,7 +286,7 @@ corresponds to a different choice of number of hidden layers.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://b-thi.github.io/'>Barinder Thind</a> <br> Funded by <a href='http://people.stat.sfu.ca/~cao/'>Jiguo Cao</a>.</p>
+  <p>Developed by Barinder Thind, <a href='http://people.stat.sfu.ca/~cao/'>Jiguo Cao</a>.</p>
 </div>
 
 <div class="pkgdown">
