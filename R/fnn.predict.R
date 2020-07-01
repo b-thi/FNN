@@ -251,10 +251,10 @@ fnn.predict = function(model,
     }
 
     # Fixing num basis
-    num_basis = rep(num_basis, length(func_cov))
+    num_basis = rep(num_basis, dim_check)
 
     # Fixing basis type
-    basis_choice = rep(basis_choice, length(func_cov))
+    basis_choice = rep(basis_choice, dim_check)
 
     # Final update to domain range
     domain_range = domain_range_list
