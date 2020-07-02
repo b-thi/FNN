@@ -468,7 +468,6 @@ fnn.predict = function(model,
 
     # Turning into matrix
     if(is.vector(df) == T){
-      print('yes')
       test_mat = matrix(nrow = length(df), ncol = 1)
       test_mat[,1] = df
       df = test_mat
