@@ -26,7 +26,8 @@ fnn.fit(
   decay_rate = 0,
   func_resp_method = 1,
   covariate_scaling = T,
-  raw_data = F
+  raw_data = F,
+  dropout = F
 )
 }
 \arguments{

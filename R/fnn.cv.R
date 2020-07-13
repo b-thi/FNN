@@ -306,7 +306,8 @@ fnn.cv <- function(nfolds,
                    decay_rate = decay_rate,
                    func_resp_method = func_resp_method,
                    covariate_scaling= covariate_scaling,
-                   raw_data = F)
+                   raw_data = F,
+                   dropout = F)
 
     # Predicting
     predictions[[i]] = fnn.predict(model = model_cv,

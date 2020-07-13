@@ -261,27 +261,28 @@
 
 #returns product of two numbers, as a trivial example
 fnn.fit <- function(resp,
-                func_cov,
-                scalar_cov = NULL,
-                basis_choice = c("fourier"),
-                num_basis = c(7),
-                hidden_layers = 2,
-                neurons_per_layer = c(64, 64),
-                activations_in_layers = c("sigmoid", "linear"),
-                domain_range = list(c(0, 1)),
-                epochs = 100,
-                loss_choice = "mse",
-                metric_choice = list("mean_squared_error"),
-                val_split = 0.2,
-                learn_rate = 0.001,
-                patience_param = 15,
-                early_stopping = T,
-                print_info = T,
-                batch_size = 32,
-                decay_rate = 0,
-                func_resp_method = 1,
-                covariate_scaling = T,
-                raw_data = F){
+                    func_cov,
+                    scalar_cov = NULL,
+                    basis_choice = c("fourier"),
+                    num_basis = c(7),
+                    hidden_layers = 2,
+                    neurons_per_layer = c(64, 64),
+                    activations_in_layers = c("sigmoid", "linear"),
+                    domain_range = list(c(0, 1)),
+                    epochs = 100,
+                    loss_choice = "mse",
+                    metric_choice = list("mean_squared_error"),
+                    val_split = 0.2,
+                    learn_rate = 0.001,
+                    patience_param = 15,
+                    early_stopping = T,
+                    print_info = T,
+                    batch_size = 32,
+                    decay_rate = 0,
+                    func_resp_method = 1,
+                    covariate_scaling = T,
+                    raw_data = F,
+                    dropout = F){
 
   # Checking what kind of problem it is
   if(is.factor(resp) == T){
@@ -608,7 +609,7 @@ fnn.fit <- function(resp,
   # function to do this that lets us add layers easily.
 
 
-  if(is.vector(resp2) == T){
+  if(is.vector(resp2) == T & dropout == F){
 
     # Creating model
     build_model <- function(train_x,
@@ -734,7 +735,7 @@ fnn.fit <- function(resp,
     }
   }
 
-  if(is.vector(resp2) == F & func_resp_method == 1){
+  if(is.vector(resp2) == F & func_resp_method == 1 & dropout == F){
 
     # Creating model
     build_model <- function(train_x,
@@ -856,6 +857,277 @@ fnn.fit <- function(resp,
 
 
   } else {
+
+  }
+
+  if(is.vector(resp2) == T & dropout != F){
+
+    # Creating model
+    build_model <- function(train_x,
+                            neurons_per_layer,
+                            activations_in_layers,
+                            hidden_layers,
+                            output_size,
+                            loss_choice,
+                            metric_choice) {
+
+      # Initializing model for FNN layer
+      model <- keras_model_sequential() %>%
+        layer_dense(units = neurons_per_layer[1], activation = activations_in_layers[1],
+                    input_shape = dim(train_x)[2])
+
+      # Adding in additional model layers
+      if(dropout == T){
+        if(hidden_layers > 1){
+          for (i in 1:(hidden_layers - 1)) {
+            model <- model %>% layer_dropout(rate = (hidden_layers - i) * 0.1) %>%
+              layer_dense(units = neurons_per_layer[i + 1], activation = activations_in_layers[i + 1])
+          }
+        }
+      } else {
+        if(hidden_layers > 1){
+          for (i in 1:(hidden_layers - 1)) {
+            model <- model %>% layer_dropout(rate = dropout[i]) %>%
+              layer_dense(units = neurons_per_layer[i + 1], activation = activations_in_layers[i + 1])
+          }
+        }
+      }
+
+
+      # Setting up final layer
+      if(problem_type != "classification"){
+        model <- model %>% layer_dense(units = output_size)
+      } else {
+        model <- model %>% layer_dense(units = ncol(resp),
+                                       activation = 'softmax')
+      }
+
+
+      # Setting up other model parameters
+      model %>% compile(
+        loss = loss_choice,
+        optimizer = optimizer_adam(lr = learn_rate, decay = decay_rate),
+        metrics = metric_choice
+      )
+
+      return(model)
+    }
+
+    # Now we have the model set up, we can begin to initialize the network before it is ultimately trained. This will also
+    # print out a summary of the model thus far
+    model <- build_model(train_x,
+                         neurons_per_layer,
+                         activations_in_layers,
+                         hidden_layers,
+                         output_size,
+                         loss_choice,
+                         metric_choice)
+
+    if(print_info ==  T){
+      print(model)
+    }
+
+    # We can also display the progress of the network to make it easier to visualize using the following. This is
+    # borrowed from the keras write up for R on the official website
+    print_dot_callback <- callback_lambda(
+      on_epoch_end = function(epoch, logs) {
+        if (epoch %% 80 == 0) cat("\n")
+        cat("x")
+      }
+    )
+
+    # The patience parameter is the amount of epochs to check for improvement.
+    early_stop <- callback_early_stopping(monitor = "val_loss", patience = patience_param)
+
+    # Now finally, we can fit the model
+    if(early_stopping == T & print_info == T){
+      history <- model %>% fit(
+        train_x,
+        train_y,
+        epochs = epochs,
+        batch_size = batch_size,
+        validation_split = val_split,
+        verbose = 0,
+        callbacks = list(early_stop, print_dot_callback)
+      )
+    } else if(early_stopping == T & print_info == F) {
+      history <- model %>% fit(
+        train_x,
+        train_y,
+        epochs = epochs,
+        validation_split = val_split,
+        verbose = 0,
+        callbacks = list(early_stop)
+      )
+    } else if(early_stopping == F & print_info == T){
+      history <- model %>% fit(
+        train_x,
+        train_y,
+        epochs = epochs,
+        validation_split = val_split,
+        verbose = 0,
+        callbacks = list(print_dot_callback)
+      )
+    } else {
+      history <- model %>% fit(
+        train_x,
+        train_y,
+        epochs = epochs,
+        validation_split = val_split,
+        verbose = 0,
+        callbacks = list()
+      )
+    }
+
+
+    # Plotting the errors
+    if(print_info == T){
+      print(plot(history, metrics = "mean_squared_error", smooth = FALSE) +
+              theme_bw() +
+              xlab("Epoch Number") +
+              ylab(""))
+    }
+
+    # Skipping line
+    cat("\n")
+
+    # Printing out
+    if(print_info == T){
+      print(history)
+    }
+  }
+
+  if(is.vector(resp2) == F & func_resp_method == 1 & dropout == T){
+
+    # Creating model
+    build_model <- function(train_x,
+                            neurons_per_layer,
+                            activations_in_layers,
+                            hidden_layers,
+                            output_size,
+                            loss_choice,
+                            metric_choice) {
+
+      # Initializing model for FNN layer
+      model <- keras_model_sequential() %>%
+        layer_dense(units = neurons_per_layer[1], activation = activations_in_layers[1],
+                    input_shape = dim(train_x)[2])
+
+      # Adding in additional model layers
+      if(dropout == T){
+        if(hidden_layers > 1){
+          for (i in 1:(hidden_layers - 1)) {
+            model <- model %>% layer_dropout(rate = (hidden_layers - i) * 0.1) %>%
+              layer_dense(units = neurons_per_layer[i + 1], activation = activations_in_layers[i + 1])
+          }
+        }
+      } else {
+        if(hidden_layers > 1){
+          for (i in 1:(hidden_layers - 1)) {
+            model <- model %>% layer_dropout(rate = dropout[i]) %>%
+              layer_dense(units = neurons_per_layer[i + 1], activation = activations_in_layers[i + 1])
+          }
+        }
+      }
+
+
+      # Setting up final layer
+      model <- model %>% layer_dense(units = output_size)
+
+      # Setting up other model parameters
+      model %>% compile(
+        loss = loss_choice,
+        optimizer = optimizer_adam(lr = learn_rate, decay = decay_rate),
+        metrics = metric_choice
+      )
+
+      return(model)
+    }
+
+    # Now we have the model set up, we can begin to initialize the network before it is ultimately trained. This will also
+    # print out a summary of the model thus far
+    model <- build_model(train_x,
+                         neurons_per_layer,
+                         activations_in_layers,
+                         hidden_layers,
+                         output_size,
+                         loss_choice,
+                         metric_choice)
+
+    if(print_info ==  T){
+      print(model)
+    }
+
+    # We can also display the progress of the network to make it easier to visualize using the following. This is
+    # borrowed from the keras write up for R on the official website
+    print_dot_callback <- callback_lambda(
+      on_epoch_end = function(epoch, logs) {
+        if (epoch %% 80 == 0) cat("\n")
+        cat("x")
+      }
+    )
+
+    # The patience parameter is the amount of epochs to check for improvement.
+    early_stop <- callback_early_stopping(monitor = "val_loss", patience = patience_param)
+
+    # Now finally, we can fit the model
+    if(early_stopping == T & print_info == T){
+      history <- model %>% fit(
+        train_x,
+        train_y,
+        epochs = epochs,
+        batch_size = batch_size,
+        validation_split = val_split,
+        verbose = 0,
+        callbacks = list(early_stop, print_dot_callback)
+      )
+    } else if(early_stopping == T & print_info == F) {
+      history <- model %>% fit(
+        train_x,
+        train_y,
+        epochs = epochs,
+        validation_split = val_split,
+        verbose = 0,
+        callbacks = list(early_stop)
+      )
+    } else if(early_stopping == F & print_info == T){
+      history <- model %>% fit(
+        train_x,
+        train_y,
+        epochs = epochs,
+        validation_split = val_split,
+        verbose = 0,
+        callbacks = list(print_dot_callback)
+      )
+    } else {
+      history <- model %>% fit(
+        train_x,
+        train_y,
+        epochs = epochs,
+        validation_split = val_split,
+        verbose = 0,
+        callbacks = list()
+      )
+    }
+
+
+    # Plotting the errors
+    if(print_info == T){
+      print(plot(history, metrics = "mean_squared_error", smooth = FALSE) +
+              theme_bw() +
+              xlab("Epoch Number") +
+              ylab(""))
+    }
+
+    # Skipping line
+    cat("\n")
+
+    # Printing out
+    if(print_info == T){
+      print(history)
+    }
+
+
 
   }
 
