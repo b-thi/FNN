@@ -118,7 +118,7 @@
 #'                      learn_rate = 0.001)
 #'
 #' @export
-# @import keras tensorflow fda.usc fda ggplot2 ggpubr caret pbapply reshape2 flux Matrix doParallel
+# @import keras tensorflow fda.usc fda ggplot2 ggpubr pbapply reshape2 flux Matrix doParallel
 
 #returns product of two numbers, as a trivial example
 fnn.cv <- function(nfolds,
