@@ -417,7 +417,7 @@ fnn.fit <- function(resp,
                                                    nbasis = num_fd_basis)
 
       # evaluating fourier basis for x(s)
-      integ_values_fourier = eval.basis(evalarg = seq(range[1], range[2], length.out = 500),
+      integ_values_fourier = eval.basis(evalarg = seq(range[1], range[2], length.out = 100),
                                         basisobj = fourier_basis_feature)
 
       # functional observation
@@ -428,7 +428,7 @@ fnn.fit <- function(resp,
                                                 nbasis = num_beta_basis)
 
       # evaluating functions for beta(s)
-      fourier_evals = eval.basis(evalarg = seq(range[1], range[2], length.out = 500),
+      fourier_evals = eval.basis(evalarg = seq(range[1], range[2], length.out = 100),
                                  basisobj = fourier_basis_beta)
 
       # Getting x(s)*beta basis function (integrand)
@@ -436,7 +436,7 @@ fnn.fit <- function(resp,
 
       # Getting integral
       integral_fourier = apply(eval_func_fourier, 2, function(x){
-        return(auc(x = seq(range[1], range[2], length.out = 500),
+        return(auc(x = seq(range[1], range[2], length.out = 100),
                    y = x))})
 
       # returning
@@ -464,7 +464,7 @@ fnn.fit <- function(resp,
                                                    norder = order_chosen_fd)
 
       # evaluating b-spline basis for x(s)
-      integ_values_bspline = eval.basis(evalarg = seq(range[1], range[2], length.out = 500),
+      integ_values_bspline = eval.basis(evalarg = seq(range[1], range[2], length.out = 100),
                                         basisobj = bspline_basis_feature)
 
       # functional observation
@@ -476,7 +476,7 @@ fnn.fit <- function(resp,
                                                 norder = order_chosen_beta)
 
       # evaluating functions for beta(s)
-      bspline_evals = eval.basis(evalarg = seq(range[1], range[2], length.out = 500),
+      bspline_evals = eval.basis(evalarg = seq(range[1], range[2], length.out = 100),
                                  basisobj = bspline_basis_beta)
 
       # Getting x(s)*beta basis function (integrand)
@@ -484,7 +484,7 @@ fnn.fit <- function(resp,
 
       # Getting integral
       integral_bspline = apply(eval_func_bspline, 2, function(x){
-        return(auc(x = seq(range[1], range[2], length.out = 500),
+        return(auc(x = seq(range[1], range[2], length.out = 100),
                    y = x))})
 
       return(integral_bspline)
@@ -551,6 +551,7 @@ fnn.fit <- function(resp,
   # }
 
   # Looping to get approximations
+  print(paste0("Evaluating Integrals:"))
   for (i in 1:dim(func_cov)[3]) {
 
     # Current data set
@@ -581,7 +582,7 @@ fnn.fit <- function(resp,
     }
 
     # Getting evaluations
-    converted_df[, left_end:right_end] = apply(df, 2, integral_eval, beta_basis = cur_basis,
+    converted_df[, left_end:right_end] = pbapply(df, 2, integral_eval, beta_basis = cur_basis,
                                                num_beta_basis = cur_basis_num,
                                                range = cur_range)
   }
