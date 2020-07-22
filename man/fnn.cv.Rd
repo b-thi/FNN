@@ -21,13 +21,13 @@ fnn.cv(
   val_split = 0.2,
   learn_rate = 0.001,
   patience_param = 15,
-  early_stopping = T,
+  early_stopping = TRUE,
   print_info = T,
   batch_size = 32,
   decay_rate = 0,
   func_resp_method = 1,
-  covariate_scaling = T,
-  raw_data = F
+  covariate_scaling = TRUE,
+  raw_data = FALSE
 )
 }
 \arguments{
@@ -75,7 +75,7 @@ bounds of the k-th functional weight.}
 \item{learn_rate}{Hyperparameter that defines how quickly you move in the direction of the gradient.}
 
 \item{patience_param}{A keras parameter that decides how many additional \code{epochs} are eclipsed with minimal change in
-error before the learning process is stopped. This is only active if \code{early_stopping = T}}
+error before the learning process is stopped. This is only active if \code{early_stopping = TRUE}}
 
 \item{early_stopping}{If True, then learning process will be halted early if error improvement isn't seen.}
 

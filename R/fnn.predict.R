@@ -200,21 +200,21 @@
 #'                     domain_range = list(c(850, 1050)),
 #'                     learn_rate = 0.001,
 #'                     epochs = 100,
-#'                     raw_data = T,
-#'                     early_stopping = T)
+#'                     raw_data = TRUE,
+#'                     early_stopping = TRUE)
 #'
 #' # Running prediction
 #' predict_class = fnn.predict(fit_class,
 #'                             func_cov = func_covs_test,
 #'                             scalar_cov = scalar_test,
 #'                             domain_range = list(c(850, 1050)),
-#'                             raw_data = T)
+#'                             raw_data = TRUE)
 #'
 #' # Rounding predictions (they are probabilities)
 #' rounded_preds = ifelse(round(predict_class)[,2] == 1, 1, 0)
 #'
 #' # Confusion matrix
-#' confusionMatrix(as.factor(rounded_preds), as.factor(test_y))
+#' # caret::confusionMatrix(as.factor(rounded_preds), as.factor(test_y))
 #'
 #'
 #' @export
@@ -227,13 +227,13 @@ fnn.predict = function(model,
                        basis_choice = c("fourier"),
                        num_basis = c(7),
                        domain_range = list(c(0, 1)),
-                       covariate_scaling = T,
-                       raw_data = F){
+                       covariate_scaling = TRUE,
+                       raw_data = FALSE){
 
   ##### Helper Functions #####
 
   # Getting check for raw vs. non raw
-  if(raw_data == T){
+  if(raw_data == TRUE){
     dim_check = length(func_cov)
   } else {
     dim_check = dim(func_cov)[3]
@@ -265,7 +265,7 @@ fnn.predict = function(model,
   }
 
   #### Creating functional observations in the case of raw data
-  if(raw_data == T){
+  if(raw_data == TRUE){
 
     # Taking in data
     dat = func_cov
@@ -468,7 +468,7 @@ fnn.predict = function(model,
     df <- func_cov[,,i]
 
     # Turning into matrix
-    if(is.vector(df) == T){
+    if(is.vector(df) == TRUE){
       test_mat = matrix(nrow = length(df), ncol = 1)
       test_mat[,1] = df
       df = test_mat
@@ -506,7 +506,7 @@ fnn.predict = function(model,
   }
 
   # Use means and standard deviations from training set to normalize test set
-  if(covariate_scaling == T){
+  if(covariate_scaling == TRUE){
     col_means_train <- attr(model$data, "scaled:center")
     col_stddevs_train <- attr(model$data, "scaled:scale")
     test_x <- scale(converted_df, center = col_means_train, scale = col_stddevs_train)

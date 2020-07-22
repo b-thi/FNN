@@ -60,7 +60,7 @@
 #' @param learn_rate Hyperparameter that defines how quickly you move in the direction of the gradient.
 #'
 #' @param patience_param A keras parameter that decides how many additional `epochs` are eclipsed with minimal change in
-#' error before the learning process is stopped. This is only active if `early_stopping = T`
+#' error before the learning process is stopped. This is only active if `early_stopping = TRUE`
 #'
 #' @param early_stopping If True, then learning process will be halted early if error improvement isn't seen.
 #'
@@ -137,23 +137,23 @@ fnn.cv <- function(nfolds,
                    val_split = 0.2,
                    learn_rate = 0.001,
                    patience_param = 15,
-                   early_stopping = T,
+                   early_stopping = TRUE,
                    print_info = T,
                    batch_size = 32,
                    decay_rate = 0,
                    func_resp_method = 1,
-                   covariate_scaling = T,
-                   raw_data = F){
+                   covariate_scaling = TRUE,
+                   raw_data = FALSE){
 
   #### Output size
-  if(is.vector(resp) == T){
+  if(is.vector(resp) == TRUE){
     output_size = 1
   } else {
     output_size = ncol(resp)
   }
 
   # Getting check for raw vs. non raw
-  if(raw_data == T){
+  if(raw_data == TRUE){
     dim_check = length(func_cov)
   } else {
     dim_check = dim(func_cov)[3]
@@ -185,7 +185,7 @@ fnn.cv <- function(nfolds,
   }
 
   #### Creating functional observations in the case of raw data
-  if(raw_data == T){
+  if(raw_data == TRUE){
 
     # Taking in data
     dat = func_cov
@@ -306,8 +306,8 @@ fnn.cv <- function(nfolds,
                    decay_rate = decay_rate,
                    func_resp_method = func_resp_method,
                    covariate_scaling= covariate_scaling,
-                   raw_data = F,
-                   dropout = F)
+                   raw_data = FALSE,
+                   dropout = FALSE)
 
     # Predicting
     predictions[[i]] = fnn.predict(model = model_cv,
@@ -317,7 +317,7 @@ fnn.cv <- function(nfolds,
                                    num_basis = num_basis,
                                    domain_range = domain_range,
                                    covariate_scaling = covariate_scaling,
-                                   raw_data = F)
+                                   raw_data = FALSE)
 
     # Getting differences
     differences = c(differences, predictions[[i]] - resp_test)
@@ -326,7 +326,7 @@ fnn.cv <- function(nfolds,
     MSPE_Fold[[i]] = mean((predictions[[i]] - true_values[[i]])^2)
 
     # Folds done
-    if(print_info == T){
+    if(print_info == TRUE){
       cat("\n")
       print(paste0("Folds Done: ", i))
     }

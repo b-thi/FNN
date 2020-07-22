@@ -11,8 +11,8 @@ fnn.predict(
   basis_choice = c("fourier"),
   num_basis = c(7),
   domain_range = list(c(0, 1)),
-  covariate_scaling = T,
-  raw_data = F
+  covariate_scaling = TRUE,
+  raw_data = FALSE
 )
 }
 \arguments{
@@ -218,21 +218,21 @@ fit_class = fnn.fit(resp = train_y,
                     domain_range = list(c(850, 1050)),
                     learn_rate = 0.001,
                     epochs = 100,
-                    raw_data = T,
-                    early_stopping = T)
+                    raw_data = TRUE,
+                    early_stopping = TRUE)
 
 # Running prediction
 predict_class = fnn.predict(fit_class,
                             func_cov = func_covs_test,
                             scalar_cov = scalar_test,
                             domain_range = list(c(850, 1050)),
-                            raw_data = T)
+                            raw_data = TRUE)
 
 # Rounding predictions (they are probabilities)
 rounded_preds = ifelse(round(predict_class)[,2] == 1, 1, 0)
 
 # Confusion matrix
-confusionMatrix(as.factor(rounded_preds), as.factor(test_y))
+# caret::confusionMatrix(as.factor(rounded_preds), as.factor(test_y))
 
 
 }

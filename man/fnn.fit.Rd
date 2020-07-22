@@ -20,14 +20,14 @@ fnn.fit(
   val_split = 0.2,
   learn_rate = 0.001,
   patience_param = 15,
-  early_stopping = T,
+  early_stopping = TRUE,
   print_info = T,
   batch_size = 32,
   decay_rate = 0,
   func_resp_method = 1,
-  covariate_scaling = T,
-  raw_data = F,
-  dropout = F
+  covariate_scaling = TRUE,
+  raw_data = FALSE,
+  dropout = FALSE
 )
 }
 \arguments{
@@ -73,7 +73,7 @@ bounds of the k-th functional weight.}
 \item{learn_rate}{Hyperparameter that defines how quickly you move in the direction of the gradient.}
 
 \item{patience_param}{A keras parameter that decides how many additional \code{epochs} are eclipsed with minimal change in
-error before the learning process is stopped. This is only active if \code{early_stopping = T}}
+error before the learning process is stopped. This is only active if \code{early_stopping = TRUE}}
 
 \item{early_stopping}{If True, then learning process will be halted early if error improvement isn't seen.}
 
@@ -91,6 +91,10 @@ approach.}
 
 \item{raw_data}{If True, then user does not need to create functional observations beforehand. The function will
 internally take care of that pre-processing.}
+
+\item{dropout}{Keras parameter that randomly drops some percentage of the neurons in a given layer.
+If TRUE, then 0.1*layer_number will be dropped; instead, you can specify a vector equal to the number
+of layers specifying what percentage to drop in each layer.}
 }
 \value{
 The following are returned:
@@ -137,9 +141,9 @@ fit1 = fnn.fit(resp = total_prec,
                func_cov = longtidunal_dat,
                scalar_cov = NULL,
                learn_rate = 0.0001,
-               raw_data = T)
+               raw_data = TRUE)
 
-# Classification Example with raw_data = T
+# Classification Example with raw_data = TRUE
 
 # Loading data
 tecator = FNN::tecator
@@ -173,15 +177,15 @@ fit_class = fnn.fit(resp = train_y,
                     domain_range = list(c(850, 1050)),
                     learn_rate = 0.001,
                     epochs = 100,
-                    raw_data = T,
-                    early_stopping = T)
+                    raw_data = TRUE,
+                    early_stopping = TRUE)
 
 # Running prediction, gets probabilities
 predict_class = fnn.predict(fit_class,
                             func_cov = func_covs_test,
                             scalar_cov = scalar_test,
                             domain_range = list(c(850, 1050)),
-                            raw_data = T)
+                            raw_data = TRUE)
 
 # Example with Pre-Processing (raw_data = F)
 

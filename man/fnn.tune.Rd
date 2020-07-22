@@ -15,7 +15,7 @@ fnn.tune(
   decay_rate = 0,
   nfolds = 5,
   cores = 4,
-  raw_data = F
+  raw_data = FALSE
 )
 }
 \arguments{

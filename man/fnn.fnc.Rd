@@ -4,7 +4,7 @@
 \alias{fnn.fnc}
 \title{Output of Estimated Functional Weights}
 \usage{
-fnn.fnc(model, domain_range, covariate_scaling = F)
+fnn.fnc(model, domain_range, covariate_scaling = FALSE)
 }
 \arguments{
 \item{model}{A keras model as outputted by \code{fnn.fit()}.}
@@ -79,6 +79,8 @@ tecator_fnn = fnn.fit(resp = tecResp_train,
                       learn_rate = 0.002)
 
 # Functional weights for this model
-est_func_weights = fnn.fnc(tecator_fnn, domain_range = list(c(850, 1050), c(850, 1050), c(850, 1050)))
+est_func_weights = fnn.fnc(tecator_fnn, domain_range = list(c(850, 1050),
+                                                            c(850, 1050),
+                                                            c(850, 1050)))
 
 }

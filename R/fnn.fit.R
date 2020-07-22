@@ -66,7 +66,7 @@
 #' @param learn_rate Hyperparameter that defines how quickly you move in the direction of the gradient.
 #'
 #' @param patience_param A keras parameter that decides how many additional `epochs` are eclipsed with minimal change in
-#' error before the learning process is stopped. This is only active if `early_stopping = T`
+#' error before the learning process is stopped. This is only active if `early_stopping = TRUE`
 #'
 #' @param early_stopping If True, then learning process will be halted early if error improvement isn't seen.
 #'
@@ -84,6 +84,10 @@
 #'
 #' @param raw_data If True, then user does not need to create functional observations beforehand. The function will
 #' internally take care of that pre-processing.
+#'
+#' @param dropout Keras parameter that randomly drops some percentage of the neurons in a given layer.
+#' If TRUE, then 0.1*layer_number will be dropped; instead, you can specify a vector equal to the number
+#' of layers specifying what percentage to drop in each layer.
 #'
 #' @examples
 #' # First, an easy example with raw_data = T
@@ -104,9 +108,9 @@
 #'                func_cov = longtidunal_dat,
 #'                scalar_cov = NULL,
 #'                learn_rate = 0.0001,
-#'                raw_data = T)
+#'                raw_data = TRUE)
 #'
-#' # Classification Example with raw_data = T
+#' # Classification Example with raw_data = TRUE
 #'
 #' # Loading data
 #' tecator = FNN::tecator
@@ -140,15 +144,15 @@
 #'                     domain_range = list(c(850, 1050)),
 #'                     learn_rate = 0.001,
 #'                     epochs = 100,
-#'                     raw_data = T,
-#'                     early_stopping = T)
+#'                     raw_data = TRUE,
+#'                     early_stopping = TRUE)
 #'
 #' # Running prediction, gets probabilities
 #' predict_class = fnn.predict(fit_class,
 #'                             func_cov = func_covs_test,
 #'                             scalar_cov = scalar_test,
 #'                             domain_range = list(c(850, 1050)),
-#'                             raw_data = T)
+#'                             raw_data = TRUE)
 #'
 #' # Example with Pre-Processing (raw_data = F)
 #'
@@ -260,6 +264,7 @@
 #' @import keras tensorflow fda.usc fda ggplot2 ggpubr pbapply reshape2 flux Matrix doParallel
 #' @importFrom caret createFolds
 #' @importFrom caret confusionMatrix
+#' @importFrom stats predict
 
 #returns product of two numbers, as a trivial example
 fnn.fit <- function(resp,
@@ -277,17 +282,17 @@ fnn.fit <- function(resp,
                     val_split = 0.2,
                     learn_rate = 0.001,
                     patience_param = 15,
-                    early_stopping = T,
+                    early_stopping = TRUE,
                     print_info = T,
                     batch_size = 32,
                     decay_rate = 0,
                     func_resp_method = 1,
-                    covariate_scaling = T,
-                    raw_data = F,
-                    dropout = F){
+                    covariate_scaling = TRUE,
+                    raw_data = FALSE,
+                    dropout = FALSE){
 
   # Checking what kind of problem it is
-  if(is.factor(resp) == T){
+  if(is.factor(resp) == TRUE){
     resp2 = as.numeric(as.character(resp))
     resp = to_categorical(resp)
     problem_type = "classification"
@@ -297,7 +302,7 @@ fnn.fit <- function(resp,
   }
 
   #### Output size
-  if(is.vector(resp) == T){
+  if(is.vector(resp) == TRUE){
     output_size = 1
   } else {
     output_size = ncol(resp)
@@ -332,7 +337,7 @@ fnn.fit <- function(resp,
   }
 
   # Getting check for raw vs. non raw
-  if(raw_data == T){
+  if(raw_data == TRUE){
     dim_check = length(func_cov)
   } else {
     dim_check = dim(func_cov)[3]
@@ -364,7 +369,7 @@ fnn.fit <- function(resp,
   }
 
   #### Creating functional observations in the case of raw data
-  if(raw_data == T){
+  if(raw_data == TRUE){
 
     # Taking in data
     dat = func_cov
@@ -558,7 +563,7 @@ fnn.fit <- function(resp,
     df <- func_cov[,,i]
 
     # Turning into matrix
-    if(is.vector(df) == T){
+    if(is.vector(df) == TRUE){
       print('yes')
       test_mat = matrix(nrow = length(df), ncol = 1)
       test_mat[,1] = df
@@ -600,7 +605,7 @@ fnn.fit <- function(resp,
   # passed onto the network. This means normalizing things and rewriting some other things
 
   # Normalize training data
-  if(covariate_scaling == T){
+  if(covariate_scaling == TRUE){
     train_x <- scale(converted_df)
   } else {
     train_x <- as.matrix(cbind(converted_df[,c(1:sum(num_basis))], scale(converted_df[,-c(1:sum(num_basis))])))
@@ -612,7 +617,7 @@ fnn.fit <- function(resp,
   # function to do this that lets us add layers easily.
 
 
-  if(is.vector(resp2) == T & dropout == F){
+  if(is.vector(resp2) == TRUE & dropout == FALSE){
 
     # Creating model
     build_model <- function(train_x,
@@ -681,7 +686,7 @@ fnn.fit <- function(resp,
     early_stop <- callback_early_stopping(monitor = "val_loss", patience = patience_param)
 
     # Now finally, we can fit the model
-    if(early_stopping == T & print_info == T){
+    if(early_stopping == TRUE & print_info == TRUE){
       history <- model %>% fit(
         train_x,
         train_y,
@@ -691,7 +696,7 @@ fnn.fit <- function(resp,
         verbose = 0,
         callbacks = list(early_stop, print_dot_callback)
       )
-    } else if(early_stopping == T & print_info == F) {
+    } else if(early_stopping == TRUE & print_info == FALSE) {
       history <- model %>% fit(
         train_x,
         train_y,
@@ -700,7 +705,7 @@ fnn.fit <- function(resp,
         verbose = 0,
         callbacks = list(early_stop)
       )
-    } else if(early_stopping == F & print_info == T){
+    } else if(early_stopping == FALSE & print_info == TRUE){
       history <- model %>% fit(
         train_x,
         train_y,
@@ -722,7 +727,7 @@ fnn.fit <- function(resp,
 
 
     # Plotting the errors
-    if(print_info == T){
+    if(print_info == TRUE){
       print(plot(history, metrics = "mean_squared_error", smooth = FALSE) +
               theme_bw() +
               xlab("Epoch Number") +
@@ -733,12 +738,12 @@ fnn.fit <- function(resp,
     cat("\n")
 
     # Printing out
-    if(print_info == T){
+    if(print_info == TRUE){
       print(history)
     }
   }
 
-  if(is.vector(resp2) == F & func_resp_method == 1 & dropout == F){
+  if(is.vector(resp2) == FALSE & func_resp_method == 1 & dropout == FALSE){
 
     # Creating model
     build_model <- function(train_x,
@@ -784,7 +789,7 @@ fnn.fit <- function(resp,
                          loss_choice,
                          metric_choice)
 
-    if(print_info ==  T){
+    if(print_info ==  TRUE){
       print(model)
     }
 
@@ -801,7 +806,7 @@ fnn.fit <- function(resp,
     early_stop <- callback_early_stopping(monitor = "val_loss", patience = patience_param)
 
     # Now finally, we can fit the model
-    if(early_stopping == T & print_info == T){
+    if(early_stopping == TRUE & print_info == TRUE){
       history <- model %>% fit(
         train_x,
         train_y,
@@ -811,7 +816,7 @@ fnn.fit <- function(resp,
         verbose = 0,
         callbacks = list(early_stop, print_dot_callback)
       )
-    } else if(early_stopping == T & print_info == F) {
+    } else if(early_stopping == TRUE & print_info == FALSE) {
       history <- model %>% fit(
         train_x,
         train_y,
@@ -820,7 +825,7 @@ fnn.fit <- function(resp,
         verbose = 0,
         callbacks = list(early_stop)
       )
-    } else if(early_stopping == F & print_info == T){
+    } else if(early_stopping == FALSE & print_info == TRUE){
       history <- model %>% fit(
         train_x,
         train_y,
@@ -842,7 +847,7 @@ fnn.fit <- function(resp,
 
 
     # Plotting the errors
-    if(print_info == T){
+    if(print_info == TRUE){
       print(plot(history, metrics = "mean_squared_error", smooth = FALSE) +
               theme_bw() +
               xlab("Epoch Number") +
@@ -853,7 +858,7 @@ fnn.fit <- function(resp,
     cat("\n")
 
     # Printing out
-    if(print_info == T){
+    if(print_info == TRUE){
       print(history)
     }
 
@@ -863,7 +868,7 @@ fnn.fit <- function(resp,
 
   }
 
-  if(is.vector(resp2) == T & dropout != F){
+  if(is.vector(resp2) == TRUE & dropout != FALSE){
 
     # Creating model
     build_model <- function(train_x,
@@ -880,7 +885,7 @@ fnn.fit <- function(resp,
                     input_shape = dim(train_x)[2])
 
       # Adding in additional model layers
-      if(dropout == T){
+      if(dropout == TRUE){
         if(hidden_layers > 1){
           for (i in 1:(hidden_layers - 1)) {
             model <- model %>% layer_dropout(rate = (hidden_layers - i) * 0.1) %>%
@@ -943,7 +948,7 @@ fnn.fit <- function(resp,
     early_stop <- callback_early_stopping(monitor = "val_loss", patience = patience_param)
 
     # Now finally, we can fit the model
-    if(early_stopping == T & print_info == T){
+    if(early_stopping == TRUE & print_info == TRUE){
       history <- model %>% fit(
         train_x,
         train_y,
@@ -953,7 +958,7 @@ fnn.fit <- function(resp,
         verbose = 0,
         callbacks = list(early_stop, print_dot_callback)
       )
-    } else if(early_stopping == T & print_info == F) {
+    } else if(early_stopping == TRUE & print_info == FALSE) {
       history <- model %>% fit(
         train_x,
         train_y,
@@ -962,7 +967,7 @@ fnn.fit <- function(resp,
         verbose = 0,
         callbacks = list(early_stop)
       )
-    } else if(early_stopping == F & print_info == T){
+    } else if(early_stopping == FALSE & print_info == TRUE){
       history <- model %>% fit(
         train_x,
         train_y,
@@ -984,7 +989,7 @@ fnn.fit <- function(resp,
 
 
     # Plotting the errors
-    if(print_info == T){
+    if(print_info == TRUE){
       print(plot(history, metrics = "mean_squared_error", smooth = FALSE) +
               theme_bw() +
               xlab("Epoch Number") +
@@ -995,12 +1000,12 @@ fnn.fit <- function(resp,
     cat("\n")
 
     # Printing out
-    if(print_info == T){
+    if(print_info == TRUE){
       print(history)
     }
   }
 
-  if(is.vector(resp2) == F & func_resp_method == 1 & dropout == T){
+  if(is.vector(resp2) == FALSE & func_resp_method == 1 & dropout == TRUE){
 
     # Creating model
     build_model <- function(train_x,
@@ -1017,7 +1022,7 @@ fnn.fit <- function(resp,
                     input_shape = dim(train_x)[2])
 
       # Adding in additional model layers
-      if(dropout == T){
+      if(dropout == TRUE){
         if(hidden_layers > 1){
           for (i in 1:(hidden_layers - 1)) {
             model <- model %>% layer_dropout(rate = (hidden_layers - i) * 0.1) %>%
@@ -1057,7 +1062,7 @@ fnn.fit <- function(resp,
                          loss_choice,
                          metric_choice)
 
-    if(print_info ==  T){
+    if(print_info ==  TRUE){
       print(model)
     }
 
@@ -1074,7 +1079,7 @@ fnn.fit <- function(resp,
     early_stop <- callback_early_stopping(monitor = "val_loss", patience = patience_param)
 
     # Now finally, we can fit the model
-    if(early_stopping == T & print_info == T){
+    if(early_stopping == TRUE & print_info == TRUE){
       history <- model %>% fit(
         train_x,
         train_y,
@@ -1084,7 +1089,7 @@ fnn.fit <- function(resp,
         verbose = 0,
         callbacks = list(early_stop, print_dot_callback)
       )
-    } else if(early_stopping == T & print_info == F) {
+    } else if(early_stopping == TRUE & print_info == FALSE) {
       history <- model %>% fit(
         train_x,
         train_y,
@@ -1093,7 +1098,7 @@ fnn.fit <- function(resp,
         verbose = 0,
         callbacks = list(early_stop)
       )
-    } else if(early_stopping == F & print_info == T){
+    } else if(early_stopping == FALSE & print_info == TRUE){
       history <- model %>% fit(
         train_x,
         train_y,
@@ -1115,7 +1120,7 @@ fnn.fit <- function(resp,
 
 
     # Plotting the errors
-    if(print_info == T){
+    if(print_info == TRUE){
       print(plot(history, metrics = "mean_squared_error", smooth = FALSE) +
               theme_bw() +
               xlab("Epoch Number") +
@@ -1126,7 +1131,7 @@ fnn.fit <- function(resp,
     cat("\n")
 
     # Printing out
-    if(print_info == T){
+    if(print_info == TRUE){
       print(history)
     }
 

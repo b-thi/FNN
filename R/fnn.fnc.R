@@ -70,14 +70,16 @@
 #'                       learn_rate = 0.002)
 #'
 #' # Functional weights for this model
-#' est_func_weights = fnn.fnc(tecator_fnn, domain_range = list(c(850, 1050), c(850, 1050), c(850, 1050)))
+#' est_func_weights = fnn.fnc(tecator_fnn, domain_range = list(c(850, 1050),
+#'                                                             c(850, 1050),
+#'                                                             c(850, 1050)))
 #'
 #' @export
 # @import keras tensorflow fda.usc fda ggplot2 ggpubr caret pbapply reshape2 flux Matrix doParallel
 
 
 #returns product of two numbers, as a trivial example
-fnn.fnc = function(model, domain_range, covariate_scaling = F){
+fnn.fnc = function(model, domain_range, covariate_scaling = FALSE){
 
   # Getting weights
   weights = rowMeans(get_weights(model$model)[[1]])
@@ -167,7 +169,7 @@ fnn.fnc = function(model, domain_range, covariate_scaling = F){
     current_range = domain_range[[j]]
 
     # Getting values
-    if(covariate_scaling == F){
+    if(covariate_scaling == FALSE){
 
       vals = fnc_valuations(obs_weight = fnc_list[[j]],
                             cur_basis = current_basis,
@@ -193,7 +195,7 @@ fnn.fnc = function(model, domain_range, covariate_scaling = F){
 
     # ggplot return
     plots_saved[[j]] = beta_coef_fnn %>%
-      ggplot(aes(x = continuum, y = beta_evals)) +
+      ggplot(aes(x = beta_coef_fnn$continuum, y = beta_coef_fnn$beta_evals)) +
       geom_line(size = 1.5, color = "blue") +
       theme_bw() +
       xlab("Continuum") +

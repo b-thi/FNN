@@ -110,26 +110,26 @@ fnn.tune = function(tune_list,
                     decay_rate = 0,
                     nfolds = 5,
                     cores = 4,
-                    raw_data = F){
+                    raw_data = FALSE){
 
   # Parallel apply set up
   #plan(multiprocess, workers = cores)
 
   #### Output size
-  if(is.vector(resp) == T){
+  if(is.vector(resp) == TRUE){
     output_size = 1
   } else {
     output_size = ncol(resp)
   }
 
-  if(raw_data == T){
+  if(raw_data == TRUE){
     dim_check = length(func_cov)
   } else {
     dim_check = dim(func_cov)[3]
   }
 
   #### Creating functional observations in the case of raw data
-  if(raw_data == T){
+  if(raw_data == TRUE){
 
     # Taking in data
     dat = func_cov
@@ -184,9 +184,9 @@ fnn.tune = function(tune_list,
       # Setting seed
       use_session_with_seed(
         1,
-        disable_gpu = F,
-        disable_parallel_cpu = F,
-        quiet = T
+        disable_gpu = FALSE,
+        disable_parallel_cpu = FALSE,
+        quiet = TRUE
       )
 
       # Clearing irrelevant information
@@ -210,11 +210,11 @@ fnn.tune = function(tune_list,
                              val_split = as.numeric(as.character(x[((length(basis_choice) + current_layer) + current_layer) + 2])),
                              learn_rate = as.numeric(as.character(x[((length(basis_choice) + current_layer) + current_layer) + 4])),
                              patience_param = as.numeric(as.character(x[((length(basis_choice) + current_layer) + current_layer) + 3])),
-                             early_stopping = T,
-                             print_info = F,
+                             early_stopping = TRUE,
+                             print_info = FALSE,
                              batch_size = batch_size,
                              decay_rate = decay_rate,
-                             raw_data = F)
+                             raw_data = FALSE)
 
       # Putting together
       list_returned <- list(MSPE = model_results$MSPE$Overall_MSPE,
@@ -248,9 +248,9 @@ fnn.tune = function(tune_list,
       current_layer = tune_list$num_hidden_layers[i]
 
       # Creating data frame of list
-      df = expand.grid(rep(list(tune_list$neurons), tune_list$num_hidden_layers[i]), stringsAsFactors = F)
-      df2 = expand.grid(rep(list(tune_list$num_basis), length(basis_choice)), stringsAsFactors = F)
-      df3 = expand.grid(rep(list(tune_list$activation_choice), tune_list$num_hidden_layers[i]), stringsAsFactors = F)
+      df = expand.grid(rep(list(tune_list$neurons), tune_list$num_hidden_layers[i]), stringsAsFactors = FALSE)
+      df2 = expand.grid(rep(list(tune_list$num_basis), length(basis_choice)), stringsAsFactors = FALSE)
+      df3 = expand.grid(rep(list(tune_list$activation_choice), tune_list$num_hidden_layers[i]), stringsAsFactors = FALSE)
       colnames(df2)[length(basis_choice)] <- "Var2.y"
       colnames(df3)[i] <- "Var2.z"
 
@@ -281,7 +281,7 @@ fnn.tune = function(tune_list,
                         domain_range = domain_range,
                         batch_size = batch_size,
                         decay_rate = decay_rate,
-                        raw_data = F)
+                        raw_data = FALSE)
 
       # Initializing
       MSPE_vals = c()
