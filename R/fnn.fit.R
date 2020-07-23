@@ -296,6 +296,8 @@ fnn.fit <- function(resp,
     resp2 = as.numeric(as.character(resp))
     resp = to_categorical(resp)
     problem_type = "classification"
+    loss_choice = "sparse_categorical_crossentropy"
+    metric_choice = "accuracy"
   } else {
     resp2 = resp
     problem_type = "regression"
