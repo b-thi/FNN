@@ -116,11 +116,12 @@
             </div>
 <a href="#introduction" class="anchor"></a>Introduction</h2>
         <p>
-            This package fits the models presented in the paper "Deep Learning with Functional Inputs". A number of functions are provided for the user to fit models, used them for prediction, and extract out important parameters. Tuning and crossvalidation functions are also provided. <br>
+            This package fits the models presented in the paper "Deep Learning with Functional Inputs". A number of functions are provided for the user to fit models, 
+            prediction tasks, and to extract out relevant parameters. Tuning and crossvalidation functions are also provided. <br>
 </p>
 
 <p>
-            In this kind of neural network, we have the option to fit models that have inputs which are both scalars and functions. The form of each neuron in this model is:
+            Within these neural network architectures, we have the option to fit models that have inputs which are both scalars and functions. The form of each neuron in this model is:
 
           </p>
 
@@ -130,7 +131,8 @@
     v = g\left(\sum_{k = 1}^{K}\int_{\mathcal T} \beta_{k}(t)x_{k}(t)dt + \sum_{j = 1}^{J}w_{j}z_{j} + b\right).
 \end{align*}
     </h5>
-    <p> A by-product of the method is a set of dynamic functional weights that can be visualized during the optimization process. This visualization leads to a greater interpretability of the relationship between the covariates and the response relative to conventional neural networks.  </p>
+    <p> A by-product of the method is a set of dynamic functional weights that can be visualized during the optimization process. This visualization leads to a greater interpretability of the relationship
+       between the covariates and the response relative to vanilla neural networks.  </p>
 
                              <div>
                 <center> <img src="article_gif.gif"> </center>
@@ -139,11 +141,11 @@
 
 
 
-<p>* For more information on the methodology, read the paper <a href="https://arxiv.org/abs/2006.09590" class="uri">here.</a></p>
+<p>* For more information on the methodology, read the paper <a href="https://www.tandfonline.com/doi/full/10.1080/10618600.2022.2097914" class="uri">here.</a></p>
 
 <p>* For a more intuitive understanding, check out this <a href="https://b-thi.github.io/Posts/FNNs.html" class="uri">article.</a></p>
 
-<p>* Extensions of the approach are under way and the package will be updated accordingly. </p>
+<p>* Extensions of the approach are under way for functional outputs. </p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -182,7 +184,7 @@
 <tbody>
   <tr>
     <td class="tg-0lax">Barinder Thind</td>
-    <td class="tg-0lax"><a href="http://b-thi.github.io">Link</a></td>
+    <td class="tg-0lax"><a href="http://www.barinderthind.com">Link</a></td>
     <td class="tg-0lax"><a href="https://www.linkedin.com/in/b-thind/">Link</a></td>
     <td class="tg-0lax"><a href="https://github.com/b-thi">Link</a></td>
   </tr>
@@ -226,11 +228,11 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Download (soon) from CRAN at: <br><a href="https://cloud.r-project.org/package=fnn">https://​cloud.r-project.org/​package=fnn</a>
+<li>Download from CRAN at: <br><a href="https://cran.r-project.org/web/packages/FuncNN/index.html">https://cran.r-project.org/web/packages/FuncNN/index.html</a>
 </li>
 <li>Browse source code at: <br><a href="https://github.com/b-thi/FNN/">https://​github.com/​b-thi/​FNN/​</a>
 </li>
-<li>Back to Home Page: <br><a href="http://b-thi.github.io/">http://b-thi.github.io</a>
+<li>Barinder's Website: <br><a href="http://www.barinderthind.com">www.barinderthind.com</a>
 </li>
 </ul>
 </div>
@@ -258,11 +260,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='http://b-thi.github.io/'>Barinder Thind</a> <br> Funded by <a href='http://people.stat.sfu.ca/~cao/'>Jiguo Cao</a></p>
-</div>
-
-<div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Developed by <a href='http://www.barinderthind.com'>Barinder Thind</a> <br> Funded by <a href='http://people.stat.sfu.ca/~cao/'>Jiguo Cao</a></p>
 </div>
 
       </footer>
